@@ -11,11 +11,10 @@
     "dist"
   ],
   "scripts": {
-    "dev": "vite -c vite.config.preview.ts",
-    "build": "tsc -b && vite build -c vite.config.build.ts",
+    "dev": "vite -c vite.config.app.ts",
+    "build": "tsc -b && vite build -c vite.config.package.ts",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "preview": "vite preview -c vite.config.preview.ts",
     "prepare": "husky",
     "typecheck": "tsc --noEmit"
   },
@@ -38,7 +37,8 @@
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.26.1",
     "vite": "^6.3.1",
-    "vite-plugin-dts": "4.5.3"
+    "vite-plugin-dts": "4.5.3",
+    "vite-tsconfig-paths": "5.1.4"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
@@ -62,5 +62,8 @@
   "homepage": "https://github.com/yourusername/blockscout_sdk#readme",
   "engines": {
     "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "@ark-ui/react": "5.7.0"
   }
 }

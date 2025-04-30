@@ -14,7 +14,10 @@
     "declaration": true,
     "declarationDir": "./dist",
     "emitDeclarationOnly": true,
-    "noEmit": false
+    "noEmit": false,
+    "paths": {
+      "package/*": ["./src/package/*"]
+    }
   },
   "include": ["src/package/**/*.ts", "src/package/**/*.tsx"],
   "exclude": ["node_modules"]
