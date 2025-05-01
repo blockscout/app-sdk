@@ -5,6 +5,9 @@ declare module "*.module.css" {
 
 declare module "*.svg" {
   import * as React from "react";
-  const ReactComponent: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+  interface SVGProps extends React.SVGProps<SVGSVGElement> {
+    className?: string;
+  }
+  const ReactComponent: React.FC<SVGProps>;
   export default ReactComponent;
 }

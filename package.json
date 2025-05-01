@@ -66,6 +66,7 @@
     "node": ">=20.0.0"
   },
   "dependencies": {
-    "@ark-ui/react": "5.7.0"
+    "@ark-ui/react": "5.7.0",
+    "dayjs": "1.11.13"
   }
 }

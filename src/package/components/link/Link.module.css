@@ -1,0 +1,19 @@
+.root {
+  font-family: "Inter", sans-serif;
+  display: inline-flex;
+  align-items: center;
+  color: #596699;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+    .icon {
+      color: #596699;
+    }
+  }
+}
+
+.icon {
+  color: rgba(51, 54, 52, 0.4);
+  width: 12px;
+  height: 12px;
+}
