@@ -10,7 +10,7 @@ interface Props {
 const TxToastFooter = ({ timestamp, hash }: Props) => {
   return (
     <div className={style.root}>
-      <Link href={`https://eth.blockscout.com/tx/${hash}`} external>
+      <Link href={`https://eth.blockscout.com/tx/${hash}`}>
         View on block explorer
       </Link>
       <Age timestamp={timestamp} />
