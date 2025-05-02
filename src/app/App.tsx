@@ -1,5 +1,5 @@
 import { Toaster } from "package/components/toast/Toast";
-import useTxToast from "package/components/tx-toast/useTxToast";
+import { useTxToast } from "package/components/tx-toast/useTxToast";
 import Link from "package/components/link/Link";
 import "package/index.css";
 import Age from "package/components/age/Age";
