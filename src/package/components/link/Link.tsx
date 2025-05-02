@@ -13,7 +13,11 @@ const Link = (props: Props) => {
   return (
     <a {...rest} className={classNames(style.root, className)}>
       {children}
-      {!noIcon && <IconLinkExternal className={style.icon} />}
+      {!noIcon && (
+        <span className={style.icon}>
+          <IconLinkExternal />
+        </span>
+      )}
     </a>
   );
 };

@@ -1,6 +1,7 @@
 import { toaster } from "package/components/toast/Toast";
 import React from "react";
 import TxToastFooter from "./TxToastFooter";
+import TxToastContent from "./TxToastContent";
 
 async function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -34,8 +35,8 @@ export default function useTxToast() {
       showToast({
         type: "success",
         title: "Transaction is completed",
-        description: <div>Send 120 USDT to address 0x5F54...09321</div>,
-        duration: 10_000,
+        description: <TxToastContent />,
+        duration: Infinity,
         meta: {
           footer: <TxToastFooter timestamp={Date.now() - 10_000} hash={hash} />,
         },
@@ -69,8 +70,8 @@ export default function useTxToast() {
       showLoading();
       await delay(1_000);
       showSuccess(hash);
-      await delay(5_000);
-      showError(hash);
+      // await delay(5_000);
+      // showError(hash);
     },
     [showLoading, showSuccess, showError],
   );
