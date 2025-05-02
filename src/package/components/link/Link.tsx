@@ -11,7 +11,12 @@ interface Props extends React.ComponentProps<"a"> {
 const Link = (props: Props) => {
   const { noIcon, children, className, ...rest } = props;
   return (
-    <a {...rest} className={classNames(style.root, className)}>
+    <a
+      className={classNames(style.root, className)}
+      target="_blank"
+      rel="noopener noreferrer"
+      {...rest}
+    >
       {children}
       {!noIcon && (
         <span className={style.icon}>
