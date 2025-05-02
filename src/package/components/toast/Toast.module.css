@@ -14,6 +14,7 @@
     display: flex;
     align-items: flex-start;
     column-gap: 12px;
+    text-align: left;
 
     &[data-type="success"] {
       [data-part="indicator"],

@@ -1,0 +1,44 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Package version
+        type: string
+        required: true
+  release:
+    types: [released]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    name: Publish package to NPM registry
+    permissions:
+      id-token: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      # Also it will setup .npmrc file to publish to npm
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.11.0"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Update package version
+        run: |
+          npm version ${{ inputs.version || github.ref_name }}
+
+      - name: Build the package
+        run: |
+          npm ci
+          npm run build
+
+      - name: Publish to NPM registry
+        run: |
+          npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
