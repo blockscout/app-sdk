@@ -3,6 +3,7 @@
   display: inline-flex;
   align-items: center;
   color: #596699;
+  cursor: pointer;
   text-decoration: none;
   &:hover {
     text-decoration: underline;

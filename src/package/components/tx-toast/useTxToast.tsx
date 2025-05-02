@@ -1,6 +1,6 @@
 import { toaster } from "package/components/toast/Toast";
 import React from "react";
-import TxToastFooter from "package/components/tx-toast/TxToastFooter";
+import TxToastFooter from "./TxToastFooter";
 
 async function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));

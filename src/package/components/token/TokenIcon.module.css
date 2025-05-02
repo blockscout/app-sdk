@@ -1,0 +1,17 @@
+.image {
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+}
+
+.placeholder {
+  width: 20px;
+  height: 20px;
+  border-radius: 8px;
+  background-color: #e2e8f0;
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}
