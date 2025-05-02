@@ -1,7 +1,7 @@
 {
-  "name": "blockscout_sdk",
+  "name": "@blockscout/app-sdk",
   "private": false,
-  "version": "0.1.0",
+  "version": "0.0.1",
   "type": "module",
   "description": "A React SDK for Blockscout integration",
   "main": "./dist/index.js",
@@ -56,12 +56,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yourusername/blockscout_sdk.git"
+    "url": "git+https://github.com/blockscout/app-sdk.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/blockscout_sdk/issues"
+    "url": "https://github.com/blockscout/app-sdk/issues"
   },
-  "homepage": "https://github.com/yourusername/blockscout_sdk#readme",
+  "homepage": "https://github.com/blockscout/app-sdk#readme",
   "engines": {
     "node": ">=20.0.0"
   },
