@@ -6,6 +6,8 @@ import Age from "package/components/age/Age";
 import Address from "package/components/address/Address";
 import Token from "package/components/token/Token";
 
+// https://eth.blockscout.com/tx/0xb438a05e0c012b49b8c8b34b2b45b14d70e25257b87026699fd850d8fe71d319
+
 export function App() {
   const txToast = useTxToast();
   return (
