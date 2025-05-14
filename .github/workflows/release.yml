@@ -30,7 +30,7 @@ jobs:
 
       - name: Update package version
         run: |
-          npm version ${{ inputs.version || github.ref_name }}
+          npm version ${{ inputs.version || github.ref_name }} --no-git-tag-version
 
       - name: Build the package
         run: |
