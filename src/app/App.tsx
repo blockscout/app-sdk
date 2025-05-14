@@ -83,13 +83,17 @@ function AppContent() {
 
       <div style={{ marginTop: "20px" }}>
         <Link href="https://eth.blockscout.com">Link</Link>
-        <Address hash="0xa8FCe579a11E551635b9c9CB915BEcd873C51254" />
+        <Address
+          hash="0xa8FCe579a11E551635b9c9CB915BEcd873C51254"
+          explorerUrl="https://eth.blockscout.com"
+        />
         <Token
           hash="0xa8FCe579a11E551635b9c9CB915BEcd873C51254"
           symbol="USDT"
           icon="https://assets.coingecko.com/coins/images/325/small/Tether.png?1696501661"
+          explorerUrl="https://eth.blockscout.com"
         />
-        <Age timestamp={Date.now() - 1000 * 60 * 60 * 24 * 30} />
+        <Age timestamp={(Date.now() - 1000 * 60 * 60 * 24 * 30).toString()} />
       </div>
     </>
   );

@@ -13,7 +13,6 @@ const Address = ({ hash, explorerUrl }: Props) => {
   return (
     <Link
       href={`${explorerUrl}${APP_CONFIG.URLS.ADDRESS(hash)}`}
-      noIcon
       className={styles.root}
     >
       <AddressIcon hash={hash} />

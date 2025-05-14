@@ -14,7 +14,6 @@ const Token = ({ hash, symbol, icon, explorerUrl }: Props) => {
   return (
     <Link
       className={styles.root}
-      noIcon
       href={`${explorerUrl}${APP_CONFIG.URLS.TOKEN(hash)}`}
     >
       <TokenIcon src={icon || undefined} />
