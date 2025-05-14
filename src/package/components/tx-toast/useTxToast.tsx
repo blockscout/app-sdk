@@ -5,11 +5,11 @@ import hexToUtf8 from "../../lib/hexToUtf8";
 import { AddressParam } from "package/api/types/address";
 import { Transaction } from "package/api/types/tx";
 import TxInterpretation from "../tx-interpretation/TxInterpretation";
+import TxToastFooter from "./TxToastFooter";
 import {
   NATIVE_COIN_SYMBOL_VAR_NAME,
   WEI_VAR_NAME,
 } from "../tx-interpretation/utils";
-import Link from "../link/Link";
 
 const HEX_REGEXP = /^(?:0x)?[\da-fA-F]+$/;
 const CACHE_EXPIRY = 24 * 60 * 60 * 1000; // 1 day in milliseconds
@@ -263,22 +263,13 @@ export function useTxToast() {
               />
             );
           }
-
-          const explorerData = explorerDataRef.current.get(chainId);
           const viewTransactionLink = (
-            <Link
-              href={`${cleanExplorerUrl}${APP_CONFIG.URLS.TRANSACTION(hash)}`}
-              style={{ marginTop: "12px" }}
-            >
-              {explorerData?.logo && (
-                <img
-                  src={explorerData.logo}
-                  alt="Explorer logo"
-                  style={{ width: "20px", height: "20px", marginRight: "4px" }}
-                />
-              )}
-              View on block explorer
-            </Link>
+            <TxToastFooter
+              timestamp={txData.timestamp}
+              hash={hash}
+              explorerLogo={explorerDataRef.current.get(chainId)?.logo}
+              cleanExplorerUrl={cleanExplorerUrl}
+            />
           );
 
           update(toastId, {
@@ -311,21 +302,13 @@ export function useTxToast() {
               : "Transaction reverted";
           }
 
-          const explorerData = explorerDataRef.current.get(chainId);
           const viewTransactionLink = (
-            <Link
-              href={`${cleanExplorerUrl}${APP_CONFIG.URLS.TRANSACTION(hash)}`}
-              style={{ marginTop: "12px" }}
-            >
-              {explorerData?.logo && (
-                <img
-                  src={explorerData.logo}
-                  alt="Explorer logo"
-                  style={{ width: "20px", height: "20px", marginRight: "4px" }}
-                />
-              )}
-              View on block explorer
-            </Link>
+            <TxToastFooter
+              timestamp={txData.timestamp}
+              hash={hash}
+              explorerLogo={explorerDataRef.current.get(chainId)?.logo}
+              cleanExplorerUrl={cleanExplorerUrl}
+            />
           );
 
           update(toastId, {
