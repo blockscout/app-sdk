@@ -2,4 +2,20 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+.timestamp {
+  color: #b0b7c3;
+  font-size: 13px;
+}
+
+.link {
+  color: #596699;
+  text-decoration: underline;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 500;
 }

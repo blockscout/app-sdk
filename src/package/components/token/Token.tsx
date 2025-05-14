@@ -1,3 +1,4 @@
+import { APP_CONFIG } from "package/config";
 import Link from "../link/Link";
 import styles from "./Token.module.css";
 import TokenIcon from "./TokenIcon";
@@ -5,17 +6,18 @@ import TokenIcon from "./TokenIcon";
 interface Props {
   hash: string;
   symbol: string;
-  icon?: string;
+  icon?: string | null;
+  explorerUrl: string;
 }
 
-const Token = ({ hash, symbol, icon }: Props) => {
+const Token = ({ hash, symbol, icon, explorerUrl }: Props) => {
   return (
     <Link
       className={styles.root}
       noIcon
-      href={`https://eth.blockscout.com/token/${hash}`}
+      href={`${explorerUrl}${APP_CONFIG.URLS.TOKEN(hash)}`}
     >
-      <TokenIcon src={icon} />
+      <TokenIcon src={icon || undefined} />
       <span className={styles.symbol}>{symbol}</span>
     </Link>
   );

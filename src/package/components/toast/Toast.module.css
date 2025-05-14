@@ -1,120 +1,156 @@
-.root {
-  &[data-scope="toast"][data-part="root"] {
-    font-family: "Inter", sans-serif;
-    font-size: 16px;
-    line-height: 1.5;
-    width: 400px;
-    border-radius: 8px;
-    background-color: #fff;
-    color: #141715;
-    box-shadow:
-      0px 1px 2px 0px rgba(21, 22, 46, 0.1),
-      0px 15px 30px -12px rgba(20, 21, 33, 0.25);
-    padding: 18px 12px 18px 18px;
-    display: flex;
-    align-items: flex-start;
-    column-gap: 12px;
-    text-align: left;
+.toastPortal {
+  position: fixed;
+  top: 0;
+  right: 0px;
+  z-index: 9999;
+  padding: 18px 12px;
+  width: 400px;
+  max-width: 400px;
+}
 
-    &[data-type="success"] {
-      [data-part="indicator"],
-      [data-part="title"] {
-        color: #388744;
-      }
-    }
+.toastContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
 
-    &[data-type="error"] {
-      [data-part="indicator"],
-      [data-part="title"] {
-        color: #bd4d45;
-      }
-    }
+.toast {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 16px;
+  opacity: 1;
+  will-change: transform, opacity;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
 
-    &[data-state="open"] {
-      animation: slide-in 200ms cubic-bezier(0.4, 0, 0.2, 1);
-    }
+.toastEntering {
+  opacity: 1;
+  transform: translateY(0);
+}
 
-    &[data-state="closed"] {
-      animation: fade-out 200ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    }
+.toastHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.toastTitle {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+  padding-right: 24px;
+}
+
+.toastTitle.success {
+  color: #388744;
+}
+
+.toastTitle.error {
+  color: #bd4d45;
+}
+
+.toastTitle.pending {
+  color: #141715;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: rgba(51, 54, 52, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 16px;
+  right: 12px;
+  z-index: 1;
+  padding: 0;
+}
+
+.closeButton:hover {
+  color: #1a1a1a;
+}
+
+.closeButton svg {
+  width: 20px;
+  height: 20px;
+}
+
+.toastContent {
+  color: #4a4a4a;
+  font-size: 14px;
+  line-height: 1.5;
+  padding-left: 32px;
+}
+
+.toastFooter {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #eee;
+}
+
+.statusIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.statusSuccess svg {
+  color: #388744;
+  width: 20px;
+  height: 20px;
+}
+
+.statusError svg {
+  color: #bd4d45;
+  width: 20px;
+  height: 20px;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid #e2e8f0;
+  border-top: 3px solid #596699;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+  box-sizing: border-box;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
   }
-
-  [data-scope="toast"][data-part="indicator"] {
-    width: 20px;
-    height: 20px;
-    margin-top: 2px;
-
-    svg {
-      width: 100%;
-      height: 100%;
-    }
-  }
-
-  [data-scope="toast"][data-part="container"] {
-    flex: 1;
-  }
-
-  [data-scope="toast"][data-part="body"] {
-    display: flex;
-    align-items: flex-start;
-    column-gap: 8px;
-  }
-
-  [data-scope="toast"][data-part="content"] {
-    display: flex;
-    flex-direction: column;
-    row-gap: 4px;
-    flex: 1;
-  }
-
-  [data-scope="toast"][data-part="title"] {
-    font-weight: 700;
-  }
-
-  [data-scope="toast"][data-part="description"] {
-    font-weight: 400;
-  }
-
-  [data-scope="toast"][data-part="close-trigger"] {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 20px;
-    height: 20px;
-    padding: 0;
-    border: none;
-    background-color: transparent;
-    color: rgba(51, 54, 52, 0.4);
-    cursor: pointer;
-    flex-shrink: 0;
-
-    svg {
-      width: 100%;
-      height: 100%;
-    }
-  }
-
-  [data-scope="toast"][data-part="footer"] {
-    margin-top: 12px;
-    font-size: 14px;
-    line-height: 16px;
+  100% {
+    transform: rotate(360deg);
   }
 }
 
-@keyframes slide-in {
-  from {
-    transform: translateY(-100%);
-  }
-  to {
-    transform: translateY(0);
-  }
-}
-
-@keyframes fade-out {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
+.toast,
+.toastTitle,
+.toastContent {
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
 }

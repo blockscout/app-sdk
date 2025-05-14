@@ -3,15 +3,16 @@ import Link from "../link/Link";
 import { truncateAddress } from "package/lib/truncation";
 import AddressIcon from "./AddressIcon";
 import Tooltip from "../tooltip/Tooltip";
-
+import { APP_CONFIG } from "package/config";
 interface Props {
   hash: string;
+  explorerUrl: string;
 }
 
-const Address = ({ hash }: Props) => {
+const Address = ({ hash, explorerUrl }: Props) => {
   return (
     <Link
-      href={`https://eth.blockscout.com/address/${hash}`}
+      href={`${explorerUrl}${APP_CONFIG.URLS.ADDRESS(hash)}`}
       noIcon
       className={styles.root}
     >

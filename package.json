@@ -67,6 +67,7 @@
   },
   "dependencies": {
     "@ark-ui/react": "5.7.0",
+    "bignumber.js": "^9.3.0",
     "classnames": "2.5.1",
     "dayjs": "1.11.13",
     "gradient-avatar": "git+https://github.com/blockscout/gradient-avatar.git"

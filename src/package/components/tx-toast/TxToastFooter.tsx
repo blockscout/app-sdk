@@ -10,10 +10,15 @@ interface Props {
 const TxToastFooter = ({ timestamp, hash }: Props) => {
   return (
     <div className={style.root}>
-      <Link href={`https://eth.blockscout.com/tx/${hash}`}>
+      <Link
+        className={style.link}
+        href={`https://eth.blockscout.com/tx/${hash}`}
+      >
         View on block explorer
       </Link>
-      <Age timestamp={timestamp} />
+      <span className={style.timestamp}>
+        <Age timestamp={timestamp} />
+      </span>
     </div>
   );
 };

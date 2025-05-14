@@ -1,65 +1,88 @@
-import {
-  Toast as ArkToast,
-  Toaster as ArkToaster,
-  createToaster,
-} from "@ark-ui/react/toast";
+import React from "react";
+import { useEffect, useState } from "react";
 import styles from "./Toast.module.css";
-
 import IconClose from "package/assets/icons/close.svg";
-import IconStatusSuccess from "package/assets/icons/status_success.svg";
-import IconStatusError from "package/assets/icons/status_error.svg";
-import Spinner from "package/components/spinner/Spinner";
+import IconSuccess from "package/assets/icons/status_success.svg";
+import IconError from "package/assets/icons/status_error.svg";
 
-export const toaster = createToaster({
-  placement: "top-end",
-  pauseOnPageIdle: true,
-  duration: 10_000,
-  offsets: "12px",
-});
+export type ToastOptions = {
+  title: string;
+  content: React.ReactNode;
+  status: "success" | "error" | "pending";
+  onClose?: () => void;
+};
 
-export const Toaster = () => {
+export type ToastInstance = {
+  id: string;
+  options: ToastOptions;
+};
+
+export type ToastProps = {
+  id: string;
+  title: string;
+  content: React.ReactNode;
+  status: "success" | "error" | "pending";
+  onClose: (id: string) => void;
+  onCloseCallback?: () => void;
+};
+
+const Toast = ({
+  id,
+  title,
+  content,
+  status,
+  onClose,
+  onCloseCallback,
+}: ToastProps) => {
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    console.log("mounted");
+    const timeout = setTimeout(() => setShow(true), 0);
+    return () => clearTimeout(timeout);
+  }, []);
+
+  const handleClose = () => {
+    onCloseCallback?.();
+    onClose(id);
+  };
+
+  const renderStatusIcon = () => {
+    if (status === "success")
+      return (
+        <span className={`${styles.statusIcon} ${styles.statusSuccess}`}>
+          <IconSuccess />
+        </span>
+      );
+    if (status === "error")
+      return (
+        <span className={`${styles.statusIcon} ${styles.statusError}`}>
+          <IconError />
+        </span>
+      );
+    if (status === "pending") return <span className={styles.spinner} />;
+    return null;
+  };
+
   return (
-    <ArkToaster toaster={toaster}>
-      {(toast) => {
-        const indicator = (() => {
-          switch (toast.type) {
-            case "success":
-              return <IconStatusSuccess />;
-            case "error":
-              return <IconStatusError />;
-            case "loading":
-              return <Spinner />;
-          }
-        })();
-
-        return (
-          <ArkToast.Root key={toast.id} className={styles.root}>
-            {indicator && (
-              <div data-scope="toast" data-part="indicator">
-                {indicator}
-              </div>
-            )}
-            <div data-scope="toast" data-part="container">
-              <div data-scope="toast" data-part="body">
-                <div data-scope="toast" data-part="content">
-                  <ArkToast.Title>{toast.title}</ArkToast.Title>
-                  <ArkToast.Description>
-                    {toast.description}
-                  </ArkToast.Description>
-                </div>
-                <ArkToast.CloseTrigger>
-                  <IconClose />
-                </ArkToast.CloseTrigger>
-              </div>
-              {toast.meta?.footer && (
-                <div data-scope="toast" data-part="footer">
-                  {toast.meta?.footer}
-                </div>
-              )}
-            </div>
-          </ArkToast.Root>
-        );
-      }}
-    </ArkToaster>
+    <div
+      className={`${styles.toast} ${styles[status]} ${show ? styles.toastEntering : ""}`}
+      data-toast-id={id}
+    >
+      <div className={styles.toastHeader}>
+        {renderStatusIcon()}
+        <h3 className={`${styles.toastTitle} ${styles[status]}`}>{title}</h3>
+        <button
+          className={styles.closeButton}
+          onClick={handleClose}
+          aria-label="Close toast"
+        >
+          <IconClose />
+        </button>
+      </div>
+      <div className={styles.toastContent}>{content}</div>
+    </div>
   );
 };
+
+export default Toast;

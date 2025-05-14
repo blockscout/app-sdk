@@ -1,2 +1,6 @@
 .root {
+  display: flex;
+  align-items: flex-start;
+  white-space: pre;
+  flex-wrap: wrap;
 }

@@ -18,11 +18,11 @@ const Link = (props: Props) => {
       {...rest}
     >
       {children}
-      {!noIcon && (
+      {/* {!noIcon && (
         <span className={style.icon}>
           <IconLinkExternal />
         </span>
-      )}
+      )} */}
     </a>
   );
 };

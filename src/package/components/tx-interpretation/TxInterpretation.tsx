@@ -10,17 +10,29 @@ import {
 } from "./utils";
 import style from "./TxInterpretation.module.css";
 import classNames from "classnames";
-import { currencyUnits } from "package/lib/chain";
+import { defaultCurrencyUnits } from "package/lib/chain";
 import TxInterpretationChunk from "./TxInterpretationChunk";
 import { NonStringTxInterpretationVariable } from "./types";
+import React from "react";
 
 interface Props {
   summary: TxInterpretationSummary;
-  addressDataMap: Record<string, AddressParam>;
+  addressDataMap?: Record<string, AddressParam>;
   className?: string;
+  currencyData?: {
+    symbol: string;
+    weiName: string;
+  };
+  explorerUrl: string;
 }
 
-const TxInterpretation = ({ summary, addressDataMap, className }: Props) => {
+const TxInterpretation = ({
+  summary,
+  addressDataMap,
+  className,
+  currencyData,
+  explorerUrl,
+}: Props) => {
   if (!summary) {
     return null;
   }
@@ -42,9 +54,17 @@ const TxInterpretation = ({ summary, addressDataMap, className }: Props) => {
         const variableName = variablesNames[index];
         let content = null;
         if (variableName === NATIVE_COIN_SYMBOL_VAR_NAME) {
-          content = <span>{currencyUnits.ether + " "}</span>;
+          content = (
+            <span style={{ fontWeight: 600 }}>
+              {currencyData?.symbol || defaultCurrencyUnits.ether + " "}
+            </span>
+          );
         } else if (variableName === WEI_VAR_NAME) {
-          content = <span>{currencyUnits.wei + " "}</span>;
+          content = (
+            <span style={{ fontWeight: 600 }}>
+              {currencyData?.weiName || defaultCurrencyUnits.wei + " "}
+            </span>
+          );
         } else if (variables[variableName]) {
           content = (
             <TxInterpretationChunk
@@ -52,16 +72,17 @@ const TxInterpretation = ({ summary, addressDataMap, className }: Props) => {
                 variables[variableName] as NonStringTxInterpretationVariable
               }
               addressDataMap={addressDataMap}
+              explorerUrl={explorerUrl}
             />
           );
         }
         return (
-          <span key={chunk + index}>
-            <span>
+          <React.Fragment key={`chunk-${index}`}>
+            <span style={{ whiteSpace: "pre" }}>
               {chunk.trim() + (chunk.trim() && variableName ? " " : "")}
             </span>
             {index < variablesNames.length && content}
-          </span>
+          </React.Fragment>
         );
       })}
     </div>
