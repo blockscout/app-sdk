@@ -1,11 +1,11 @@
 import Link from "package/components/link/Link";
-import "package/index.css";
 import Age from "package/components/age/Age";
 import Address from "package/components/address/Address";
 import Token from "package/components/token/Token";
 import { useTxToast } from "package/components/tx-toast/useTxToast";
 import { useEffect, useState } from "react";
 import { ToastProvider } from "package/components/toast/ToastProvider";
+import { useTxPopup } from "package/components/tx-popup/TxPopup";
 
 // Example transaction hashes
 const TX_HASHES = {
@@ -26,6 +26,15 @@ const TX_HASHES = {
 function AppContent() {
   const { openTxToast } = useTxToast();
   const [pendingTxs, setPendingTxs] = useState<string[]>([]);
+
+  // TxPopup demo logic
+  const { openModal: openTxPopup, Popup: TxPopupModal } = useTxPopup();
+  const [popupChainId, setPopupChainId] = useState("1");
+  const [popupAddress, setPopupAddress] = useState("");
+
+  const showPopupFor = (chainId: string, address?: string) => {
+    openTxPopup(chainId, address);
+  };
 
   const showToast = (hash: string) => {
     openTxToast("1", hash);
@@ -57,6 +66,60 @@ function AppContent() {
 
   return (
     <>
+      {/* TxPopup Demo UI */}
+      <div style={{ marginBottom: 32 }}>
+        <h3>TxPopup Examples</h3>
+        <div style={{ display: "flex", gap: 8, marginBottom: 8 }}>
+          <button
+            onClick={() =>
+              showPopupFor("1", "0x00000000219ab540356cBB839Cbe05303d7705Fa")
+            }
+          >
+            Open Popup: 0x000...05Fa
+          </button>
+          <button
+            onClick={() =>
+              showPopupFor("1", "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2")
+            }
+          >
+            Open Popup: 0xC02...6Cc2
+          </button>
+          <button
+            onClick={() =>
+              showPopupFor("1", "0xBE0eB53F46cd790Cd13851d5EFf43D12404d33E8")
+            }
+          >
+            Open Popup: 0xBE0...3E8
+          </button>
+        </div>
+        <button onClick={() => showPopupFor("1")}>
+          Open Popup: All Transactions (chain 1)
+        </button>
+        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+          <input
+            type="text"
+            placeholder="Chain ID"
+            value={popupChainId}
+            onChange={(e) => setPopupChainId(e.target.value)}
+            style={{ width: 80 }}
+          />
+          <input
+            type="text"
+            placeholder="Address (optional)"
+            value={popupAddress}
+            onChange={(e) => setPopupAddress(e.target.value)}
+            style={{ width: 320 }}
+          />
+          <button
+            onClick={() =>
+              showPopupFor(popupChainId, popupAddress || undefined)
+            }
+          >
+            Open Popup
+          </button>
+        </div>
+      </div>
+      {TxPopupModal}
       <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
         <div>
           <h3>Pending Transactions</h3>

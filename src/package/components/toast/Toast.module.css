@@ -154,3 +154,43 @@
     Arial,
     sans-serif;
 }
+
+/* --- Mobile styles --- */
+@media (max-width: 600px) {
+  .toastPortal {
+    width: 100vw;
+    max-width: 100vw;
+    left: 0;
+    right: 0;
+    padding: 0;
+    padding-top: 4px;
+  }
+  .toast {
+    /* border-radius: 0 0 8px 8px; */
+    width: calc(100vw - 24px);
+    max-width: calc(100vw - 16px);
+    min-width: 0;
+    padding: 12px 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-left: 4px;
+  }
+  .toastHeader {
+    gap: 8px;
+  }
+  .toastTitle {
+    font-size: 15px;
+    padding-right: 16px;
+  }
+  .toastContent {
+    font-size: 13px;
+    padding-left: 24px;
+  }
+  .closeButton {
+    top: 10px;
+    right: 8px;
+  }
+  .closeButton svg {
+    width: 18px;
+    height: 18px;
+  }
+}

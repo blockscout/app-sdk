@@ -1,18 +1,14 @@
 import React from "react";
 import { useToast } from "../toast/useToast";
-import { API_CONFIG, APP_CONFIG } from "package/config";
+import { API_CONFIG } from "package/config";
 import hexToUtf8 from "../../lib/hexToUtf8";
 import { AddressParam } from "package/api/types/address";
 import { Transaction } from "package/api/types/tx";
 import TxInterpretation from "../tx-interpretation/TxInterpretation";
 import TxToastFooter from "./TxToastFooter";
-import {
-  NATIVE_COIN_SYMBOL_VAR_NAME,
-  WEI_VAR_NAME,
-} from "../tx-interpretation/utils";
+import { ChainData, fetchChainData } from "package/lib/getChainData";
 
 const HEX_REGEXP = /^(?:0x)?[\da-fA-F]+$/;
-const CACHE_EXPIRY = 24 * 60 * 60 * 1000; // 1 day in milliseconds
 
 const getTxSummaryStub = (
   from: AddressParam,
@@ -38,88 +34,29 @@ const getTxSummaryStub = (
   };
 };
 
-interface CachedExplorerData {
-  url: string;
-  logo: string;
-  timestamp: number;
-}
-
-interface CachedCurrencyData {
-  symbol: string;
-  weiName: string;
-  timestamp: number;
-}
-
-const getCachedExplorerUrl = (
-  chainId: string,
-): { url: string; logo: string } | null => {
-  const cached = localStorage.getItem(`explorer_url_${chainId}`);
-  if (!cached) return null;
-
-  try {
-    const data: CachedExplorerData = JSON.parse(cached);
-    if (Date.now() - data.timestamp > CACHE_EXPIRY) {
-      localStorage.removeItem(`explorer_url_${chainId}`);
-      return null;
-    }
-    return { url: data.url, logo: data.logo };
-  } catch {
-    return null;
-  }
-};
-
-const setCachedExplorerUrl = (chainId: string, url: string, logo: string) => {
-  const data: CachedExplorerData = {
-    url,
-    logo,
-    timestamp: Date.now(),
-  };
-  localStorage.setItem(`explorer_url_${chainId}`, JSON.stringify(data));
-};
-
-const getCachedCurrencyData = (
-  chainId: string,
-): { symbol: string; weiName: string } | null => {
-  const cached = localStorage.getItem(`currency_data_${chainId}`);
-  if (!cached) return null;
-
-  try {
-    const data: CachedCurrencyData = JSON.parse(cached);
-    if (Date.now() - data.timestamp > CACHE_EXPIRY) {
-      localStorage.removeItem(`currency_data_${chainId}`);
-      return null;
-    }
-    return { symbol: data.symbol, weiName: data.weiName };
-  } catch {
-    return null;
-  }
-};
-
-const setCachedCurrencyData = (
-  chainId: string,
-  symbol: string,
-  weiName: string,
-) => {
-  const data: CachedCurrencyData = {
-    symbol,
-    weiName,
-    timestamp: Date.now(),
-  };
-  localStorage.setItem(`currency_data_${chainId}`, JSON.stringify(data));
-};
-
 export function useTxToast() {
   const { open, close, update } = useToast();
   const pollingRef = React.useRef<Map<string, number>>(new Map());
   const abortControllerRef = React.useRef<Map<string, AbortController>>(
     new Map(),
   );
-  const currencyDataRef = React.useRef<
-    Map<string, { symbol: string; weiName: string }>
-  >(new Map());
-  const explorerDataRef = React.useRef<
-    Map<string, { url: string; logo: string }>
-  >(new Map());
+  const chainDataRef = React.useRef<Map<string, ChainData>>(new Map());
+
+  // Add cleanup effect
+  React.useEffect(() => {
+    return () => {
+      // Clean up all polling intervals and abort controllers when component unmounts
+      pollingRef.current.forEach((intervalId) => {
+        clearInterval(intervalId);
+      });
+      pollingRef.current.clear();
+
+      abortControllerRef.current.forEach((controller) => {
+        controller.abort();
+      });
+      abortControllerRef.current.clear();
+    };
+  }, []);
 
   const stopPolling = React.useCallback((toastId: string) => {
     const intervalId = pollingRef.current.get(toastId);
@@ -193,71 +130,23 @@ export function useTxToast() {
           let content: React.ReactNode = "Transaction confirmed";
 
           if (summary) {
-            // Check if we need to fetch currency data
-            const needsCurrencyData =
-              summary.summary_template_variables &&
-              Object.values(summary.summary_template_variables).some(
-                (v) =>
-                  typeof v === "object" &&
-                  v !== null &&
-                  "type" in v &&
-                  (v.type === NATIVE_COIN_SYMBOL_VAR_NAME ||
-                    v.type === WEI_VAR_NAME),
-              );
-
-            let currencyData = currencyDataRef.current.get(chainId);
-
-            if (needsCurrencyData) {
-              if (!currencyData) {
-                const cachedData = getCachedCurrencyData(chainId);
-                if (cachedData) {
-                  currencyData = cachedData;
-                } else {
-                  try {
-                    const configResponse = await fetch(
-                      `${cleanExplorerUrl}${APP_CONFIG.URLS.ENVS}`,
-                    );
-                    if (configResponse.ok) {
-                      const configData = await configResponse.json();
-                      currencyData = {
-                        symbol:
-                          configData.NEXT_PUBLIC_NETWORK_CURRENCY_SYMBOL ||
-                          "Eth",
-                        weiName:
-                          configData.NEXT_PUBLIC_NETWORK_CURRENCY_WEI_NAME ||
-                          "wei",
-                      };
-                      setCachedCurrencyData(
-                        chainId,
-                        currencyData.symbol,
-                        currencyData.weiName,
-                      );
-                    } else {
-                      currencyData = { symbol: "Eth", weiName: "wei" };
-                    }
-                  } catch (error) {
-                    console.error("Error fetching currency data:", error);
-                    currencyData = { symbol: "Eth", weiName: "wei" };
-                  }
+            const chainData = chainDataRef.current.get(chainId);
+            const currencyData = chainData
+              ? {
+                  symbol: chainData.currencySymbol,
+                  weiName: chainData.currencyWeiName,
                 }
-
-                currencyDataRef.current.set(chainId, currencyData);
-              }
-            }
-
-            const addressDataMap: Record<string, AddressParam> = {};
-            [txData?.from, txData?.to]
-              .filter((data): data is AddressParam =>
-                Boolean(data && data.hash),
-              )
-              .forEach((data) => {
-                addressDataMap[data.hash] = data;
-              });
+              : undefined;
 
             content = (
               <TxInterpretation
                 summary={summary}
-                addressDataMap={addressDataMap}
+                addressDataMap={{
+                  [txData.from.hash]: txData.from,
+                  ...(txData.to && txData.to.hash
+                    ? { [txData.to.hash]: txData.to }
+                    : {}),
+                }}
                 currencyData={currencyData}
                 explorerUrl={cleanExplorerUrl}
               />
@@ -267,7 +156,7 @@ export function useTxToast() {
             <TxToastFooter
               timestamp={txData.timestamp}
               hash={hash}
-              explorerLogo={explorerDataRef.current.get(chainId)?.logo}
+              explorerLogo={chainDataRef.current.get(chainId)?.explorerLogo}
               cleanExplorerUrl={cleanExplorerUrl}
             />
           );
@@ -306,7 +195,7 @@ export function useTxToast() {
             <TxToastFooter
               timestamp={txData.timestamp}
               hash={hash}
-              explorerLogo={explorerDataRef.current.get(chainId)?.logo}
+              explorerLogo={chainDataRef.current.get(chainId)?.explorerLogo}
               cleanExplorerUrl={cleanExplorerUrl}
             />
           );
@@ -355,46 +244,15 @@ export function useTxToast() {
         const controller = new AbortController();
         abortControllerRef.current.set(id, controller);
 
-        // Check cache first
-        let explorerData = getCachedExplorerUrl(chainId);
-
-        if (!explorerData) {
-          const response = await fetch(
-            `${API_CONFIG.CHAINS_API.BASE_URL}${API_CONFIG.CHAINS_API.ENDPOINTS.CHAIN(chainId)}`,
-            {
-              signal: controller.signal,
-            },
-          );
-
-          if (!response.ok) {
-            close(id);
-            throw new Error(
-              `Failed to fetch chain data for chain ID ${chainId}`,
-            );
-          }
-
-          const data = await response.json();
-          const explorerUrl = data.explorers?.[0]?.url;
-          const explorerLogo = data.logo;
-
-          if (!explorerUrl) {
-            close(id);
-            throw new Error(`No explorer URL found for chain ID ${chainId}`);
-          }
-
-          // Cache the explorer data
-          setCachedExplorerUrl(chainId, explorerUrl, explorerLogo || "");
-          explorerData = { url: explorerUrl, logo: explorerLogo || "" };
-        }
-
-        explorerDataRef.current.set(chainId, explorerData);
+        const chainData = await fetchChainData(chainId);
+        chainDataRef.current.set(chainId, chainData);
 
         // Initial check
-        await checkTransactionStatus(id, explorerData.url, hash, chainId);
+        await checkTransactionStatus(id, chainData.explorerUrl, hash, chainId);
 
         // Start polling if status is null
         const intervalId = window.setInterval(() => {
-          checkTransactionStatus(id, explorerData.url, hash, chainId);
+          checkTransactionStatus(id, chainData.explorerUrl, hash, chainId);
         }, 5000);
 
         pollingRef.current.set(id, intervalId);

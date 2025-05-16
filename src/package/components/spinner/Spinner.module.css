@@ -1,7 +1,7 @@
 .root {
   --spinner-track-color: rgba(51, 54, 52, 0.1);
   --spinner-border-color: #596699;
-  --spinner-size: 20px;
+  --spinner-size: 32px;
 
   display: inline-block;
   box-sizing: border-box;

@@ -36,8 +36,8 @@ const Toast = ({
 }: ToastProps) => {
   const [show, setShow] = useState(false);
 
+  // Handle animation
   useEffect(() => {
-    console.log("mounted");
     const timeout = setTimeout(() => setShow(true), 0);
     return () => clearTimeout(timeout);
   }, []);

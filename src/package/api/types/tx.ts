@@ -19,6 +19,16 @@ export type TransactionRevertReason =
     }
   | DecodedInput;
 
+export type TransactionType =
+  | "rootstock_remasc"
+  | "rootstock_bridge"
+  | "token_transfer"
+  | "contract_creation"
+  | "contract_call"
+  | "token_creation"
+  | "coin_transfer"
+  | "blob_transaction";
+
 export type Transaction = {
   to: AddressParam | null;
   created_contract: AddressParam | null;
@@ -53,4 +63,5 @@ export type Transaction = {
   l1_gas_price?: string;
   l1_gas_used?: string;
   has_error_in_internal_transactions: boolean | null;
+  transaction_types: Array<TransactionType>;
 };

@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { createPortal } from "react-dom";
+import "./Toast.module.css";
 import styles from "./Toast.module.css";
 import Toast from "./Toast";
 import { ToastContext, ToastOptions } from "./ToastContext";
@@ -21,7 +22,13 @@ export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const close = useCallback((id: string) => {
-    setToasts((prev) => prev.filter((t) => t.id !== id));
+    setToasts((prev) => {
+      const toast = prev.find((t) => t.id === id);
+      if (toast?.options.onClose) {
+        toast.options.onClose();
+      }
+      return prev.filter((t) => t.id !== id);
+    });
   }, []);
 
   const update = useCallback((id: string, options: Partial<ToastOptions>) => {
@@ -46,6 +53,7 @@ export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
                 content={t.options.content}
                 status={t.options.status}
                 onClose={close}
+                onCloseCallback={t.options.onClose}
               />
             ))}
           </div>

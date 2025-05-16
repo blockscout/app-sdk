@@ -56,13 +56,13 @@ const TxInterpretation = ({
         if (variableName === NATIVE_COIN_SYMBOL_VAR_NAME) {
           content = (
             <span style={{ fontWeight: 600 }}>
-              {currencyData?.symbol || defaultCurrencyUnits.ether + " "}
+              {(currencyData?.symbol || defaultCurrencyUnits.ether) + " "}
             </span>
           );
         } else if (variableName === WEI_VAR_NAME) {
           content = (
             <span style={{ fontWeight: 600 }}>
-              {currencyData?.weiName || defaultCurrencyUnits.wei + " "}
+              {(currencyData?.weiName || defaultCurrencyUnits.wei) + " "}
             </span>
           );
         } else if (variables[variableName]) {

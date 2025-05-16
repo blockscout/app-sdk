@@ -1,6 +1,5 @@
 .root {
-  font-family: "Inter", sans-serif;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   color: #596699;
   cursor: pointer;
@@ -17,7 +16,7 @@
   color: rgba(51, 54, 52, 0.4);
   width: 12px;
   height: 12px;
-  display: inline-flex;
+  display: flex;
 
   svg {
     width: 100%;
