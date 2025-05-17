@@ -35,7 +35,11 @@ export type ToastInstance = {
   options: ToastOptions;
 };
 
-export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
+export const NotificationProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const [toasts, setToasts] = useState<ToastInstance[]>([]);
 
   console.log("toasts", toasts);

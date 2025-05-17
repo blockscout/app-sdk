@@ -34,7 +34,7 @@ const getTxSummaryStub = (
   };
 };
 
-export function useTxToast() {
+export function useNotification() {
   const { open, close, update } = useToast();
   const pollingRef = React.useRef<Map<string, number>>(new Map());
   const abortControllerRef = React.useRef<Map<string, AbortController>>(

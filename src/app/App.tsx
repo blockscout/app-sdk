@@ -2,11 +2,11 @@ import Link from "package/components/link/Link";
 import Age from "package/components/age/Age";
 import Address from "package/components/address/Address";
 import Token from "package/components/token/Token";
-import { useTxToast } from "package/components/tx-toast/useTxToast";
+import { useNotification } from "package/components/tx-toast/useTxToast";
 import { useEffect, useState } from "react";
-import { ToastProvider } from "package/components/toast/ToastProvider";
-import { useTxPopup } from "package/components/tx-popup/useTxPopup";
-import { TxPopupProvider } from "package/components/tx-popup/TxPopupProvider";
+import { NotificationProvider } from "package/components/toast/ToastProvider";
+import { useTransactionPopup } from "package/components/tx-popup/useTxPopup";
+import { TransactionPopupProvider } from "package/components/tx-popup/TxPopupProvider";
 
 // Example transaction hashes
 const TX_HASHES = {
@@ -25,11 +25,11 @@ const TX_HASHES = {
 };
 
 function AppContent() {
-  const { openTxToast } = useTxToast();
+  const { openTxToast } = useNotification();
   const [pendingTxs, setPendingTxs] = useState<string[]>([]);
 
   // TxPopup demo logic
-  const { openPopup } = useTxPopup();
+  const { openPopup } = useTransactionPopup();
   const [popupChainId, setPopupChainId] = useState("1");
   const [popupAddress, setPopupAddress] = useState("");
 
@@ -164,10 +164,10 @@ function AppContent() {
 
 export function App() {
   return (
-    <ToastProvider>
-      <TxPopupProvider>
+    <NotificationProvider>
+      <TransactionPopupProvider>
         <AppContent />
-      </TxPopupProvider>
-    </ToastProvider>
+      </TransactionPopupProvider>
+    </NotificationProvider>
   );
 }

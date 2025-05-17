@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 import { TxPopupContext, TxPopupOptions } from "./TxPopupContext";
 import { TxPopup } from "./TxPopup";
 
-export const TxPopupProvider = ({
+export const TransactionPopupProvider = ({
   children,
 }: {
   children: React.ReactNode;
