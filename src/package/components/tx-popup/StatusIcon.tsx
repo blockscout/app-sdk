@@ -32,7 +32,7 @@ const StatusIcon = ({ status, tx, searchAddress }: StatusIconProps) => {
       }
       if (tx.from?.hash === searchAddress) {
         // @ts-expect-error SVG component props not properly typed
-        return <IconArrowNE width={20} height={20} />;
+        return <IconArrowNE width={24} height={24} />;
       }
     }
   }
