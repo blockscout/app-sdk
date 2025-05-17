@@ -22,6 +22,12 @@ const ToastContainer = styled.div`
   flex-direction: column;
   gap: 16px;
   pointer-events: auto;
+
+  @media (max-width: 600px) {
+    top: 8px;
+    right: 0;
+    left: 0;
+  }
 `;
 
 export type ToastInstance = {

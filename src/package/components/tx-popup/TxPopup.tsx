@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Spinner from "../spinner/Spinner";
 import TxInterpretation from "../tx-interpretation/TxInterpretation";
@@ -114,7 +114,7 @@ const TransactionItem = styled.div`
   background: #fff;
   padding: 16px 0 8px 0;
   justify-content: space-between;
-  align-items: center;
+  line-height: 22px;
 
   @media (max-width: 600px) {
     flex-direction: column;
@@ -172,7 +172,6 @@ const StatusIconWrapper = styled.div<{
   @media (max-width: 600px) {
     width: 22px;
     height: 22px;
-    margin-top: 2px;
   }
 `;
 
@@ -201,7 +200,7 @@ const TransactionMeta = styled.div`
     gap: 8px;
     margin-left: 32px;
     margin-top: 4px;
-    justify-content: space-between;
+    align-self: end;
   }
 `;
 
@@ -236,6 +235,7 @@ const ViewAllLink = styled.div`
 interface TxPopupProps {
   chainId: string;
   address?: string;
+  onClose: () => void;
 }
 
 type TxWithSummary = {
@@ -244,52 +244,40 @@ type TxWithSummary = {
   status: "pending" | "success" | "error";
 };
 
-export function useTxPopup() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [params, setParams] = useState<TxPopupProps | null>(null);
-  const [loading, setLoading] = useState(false);
+export function TxPopup({ chainId, address, onClose }: TxPopupProps) {
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [txs, setTxs] = useState<TxWithSummary[]>([]);
   const [chainData, setChainData] = useState<ChainData | null>(null);
 
-  const openModal = useCallback((chainId: string, address?: string) => {
-    setParams({ chainId, address });
-    setIsOpen(true);
-  }, []);
-
-  const closeModal = useCallback(() => {
-    setIsOpen(false);
-    setParams(null);
-    setTxs([]);
-    setChainData(null);
-    setError(null);
-    setLoading(false);
-  }, []);
-
   useEffect(() => {
-    if (!isOpen || !params) return;
     let abort = false;
     const fetchAll = async () => {
+      if (abort) return;
       setLoading(true);
       setError(null);
+      setTxs([]);
+
       try {
         // 1. Fetch chain data
-        const data = await fetchChainData(params.chainId);
+        const data = await fetchChainData(chainId);
         if (abort) return;
         setChainData(data);
-        console.log("data", data);
+
         // 2. Fetch transactions
-        const txUrl = params.address
-          ? `${data.explorerUrl}${API_CONFIG.EXPLORER_API.ENDPOINTS.ADDRESS_TRANSACTIONS(params.address)}`
+        const txUrl = address
+          ? `${data.explorerUrl}${API_CONFIG.EXPLORER_API.ENDPOINTS.ADDRESS_TRANSACTIONS(address)}`
           : `${data.explorerUrl}${API_CONFIG.EXPLORER_API.ENDPOINTS.ALL_TRANSACTIONS()}`;
-        console.log("txUrl", txUrl);
+
         const txResp = await fetch(txUrl);
+        if (abort) return;
         if (!txResp.ok) {
           setError("Failed to fetch transactions");
           return;
         }
         const txData = await txResp.json();
         const items: Transaction[] = txData.items?.slice(0, 5) || [];
+
         // 3. For each transaction, fetch summary/interpretation
         const txsWithSummaries: TxWithSummary[] = await Promise.all(
           items.map(async (tx) => {
@@ -318,53 +306,53 @@ export function useTxPopup() {
         if (abort) return;
         setTxs(txsWithSummaries);
       } catch (e: unknown) {
+        if (abort) return;
         const error = e as { message?: string };
         setError(error.message || "Unknown error occurred");
       } finally {
-        setLoading(false);
+        if (!abort) {
+          setLoading(false);
+        }
       }
     };
     fetchAll();
     return () => {
       abort = true;
     };
-  }, [isOpen, params]);
+  }, [chainId, address]);
 
-  const Popup =
-    isOpen && params ? (
-      <Overlay>
-        <Container>
-          <Header>
-            <Title>
-              Recent transaction{" "}
-              {params.address
-                ? `for ${params.address.slice(0, 4)}...${params.address.slice(-4)}`
-                : ""}
-            </Title>
-            <CloseButton onClick={closeModal} aria-label="Close">
-              {/* @ts-expect-error SVG component props not properly typed */}
-              <IconClose width={24} height={24} />
-            </CloseButton>
-          </Header>
-          {loading && (
-            <LoadingContainer>
-              <Spinner size={48} />
-            </LoadingContainer>
-          )}
-          {error && <Error>{error}</Error>}
-          {!loading && !error && txs.length === 0 && (
-            <div>No transactions found.</div>
-          )}
+  return (
+    <Overlay>
+      <Container>
+        <Header>
+          <Title>
+            Recent transaction{" "}
+            {address ? `for ${address.slice(0, 4)}...${address.slice(-4)}` : ""}
+          </Title>
+          <CloseButton onClick={onClose} aria-label="Close">
+            {/* @ts-expect-error SVG component props not properly typed */}
+            <IconClose width={24} height={24} />
+          </CloseButton>
+        </Header>
+        {loading ? (
+          <LoadingContainer>
+            <Spinner size={48} />
+          </LoadingContainer>
+        ) : error ? (
+          <Error>{error}</Error>
+        ) : txs.length === 0 ? (
+          <div>No transactions found.</div>
+        ) : (
           <TransactionsList>
             {txs.map(({ tx, summary, status }, idx) => (
-              <>
-                <TransactionItem key={tx.hash}>
+              <React.Fragment key={tx.hash}>
+                <TransactionItem>
                   <TransactionRow>
                     <StatusIconWrapper status={status}>
                       <StatusIcon
                         status={status}
                         tx={tx}
-                        searchAddress={params.address}
+                        searchAddress={address}
                       />
                     </StatusIconWrapper>
                     <TransactionContent>
@@ -421,17 +409,16 @@ export function useTxPopup() {
                   </TransactionMeta>
                 </TransactionItem>
                 {idx < txs.length - 1 && <Divider />}
-              </>
+              </React.Fragment>
             ))}
           </TransactionsList>
-          <ViewAllLink>
-            <Link href={APP_CONFIG.URLS.ALL_TRANSACTIONS()}>
-              View all transactions in the block explorer
-            </Link>
-          </ViewAllLink>
-        </Container>
-      </Overlay>
-    ) : null;
-
-  return { openModal, Popup };
+        )}
+        <ViewAllLink>
+          <Link href={APP_CONFIG.URLS.ALL_TRANSACTIONS()}>
+            View all transactions in the block explorer
+          </Link>
+        </ViewAllLink>
+      </Container>
+    </Overlay>
+  );
 }

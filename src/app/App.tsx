@@ -5,7 +5,8 @@ import Token from "package/components/token/Token";
 import { useTxToast } from "package/components/tx-toast/useTxToast";
 import { useEffect, useState } from "react";
 import { ToastProvider } from "package/components/toast/ToastProvider";
-import { useTxPopup } from "package/components/tx-popup/TxPopup";
+import { useTxPopup } from "package/components/tx-popup/useTxPopup";
+import { TxPopupProvider } from "package/components/tx-popup/TxPopupProvider";
 
 // Example transaction hashes
 const TX_HASHES = {
@@ -28,12 +29,12 @@ function AppContent() {
   const [pendingTxs, setPendingTxs] = useState<string[]>([]);
 
   // TxPopup demo logic
-  const { openModal: openTxPopup, Popup: TxPopupModal } = useTxPopup();
+  const { openPopup } = useTxPopup();
   const [popupChainId, setPopupChainId] = useState("1");
   const [popupAddress, setPopupAddress] = useState("");
 
   const showPopupFor = (chainId: string, address?: string) => {
-    openTxPopup(chainId, address);
+    openPopup({ chainId, address });
   };
 
   const showToast = (hash: string) => {
@@ -119,7 +120,6 @@ function AppContent() {
           </button>
         </div>
       </div>
-      {TxPopupModal}
       <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
         <div>
           <h3>Pending Transactions</h3>
@@ -165,7 +165,9 @@ function AppContent() {
 export function App() {
   return (
     <ToastProvider>
-      <AppContent />
+      <TxPopupProvider>
+        <AppContent />
+      </TxPopupProvider>
     </ToastProvider>
   );
 }
