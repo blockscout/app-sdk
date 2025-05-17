@@ -1,7 +1,18 @@
+import styled from "styled-components";
 import { APP_CONFIG } from "package/config";
 import Link from "../link/Link";
-import styles from "./Token.module.css";
 import TokenIcon from "./TokenIcon";
+
+const TokenLink = styled(Link)`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 600;
+`;
+
+const Symbol = styled.span`
+  font-weight: 600;
+`;
 
 interface Props {
   hash: string;
@@ -12,13 +23,10 @@ interface Props {
 
 const Token = ({ hash, symbol, icon, explorerUrl }: Props) => {
   return (
-    <Link
-      className={styles.root}
-      href={`${explorerUrl}${APP_CONFIG.URLS.TOKEN(hash)}`}
-    >
+    <TokenLink href={`${explorerUrl}${APP_CONFIG.URLS.TOKEN(hash)}`}>
       <TokenIcon src={icon || undefined} />
-      <span className={styles.symbol}>{symbol}</span>
-    </Link>
+      <Symbol>{symbol}</Symbol>
+    </TokenLink>
   );
 };
 

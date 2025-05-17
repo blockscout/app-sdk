@@ -1,5 +1,22 @@
+import styled from "styled-components";
 import { Tooltip as ArkTooltip } from "@ark-ui/react/tooltip";
-import style from "./Tooltip.module.css";
+
+const StyledContent = styled(ArkTooltip.Content)`
+  --background: #2d3748;
+  --color: #fff;
+  --arrow-size: 6px;
+  --arrow-background: var(--background);
+
+  &[data-scope="tooltip"][data-part="content"] {
+    background: var(--background);
+    color: var(--color);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 500;
+  }
+`;
 
 interface Props extends ArkTooltip.RootProps {
   children: React.ReactNode;
@@ -31,12 +48,12 @@ const Tooltip = ({
     >
       <ArkTooltip.Trigger asChild>{children}</ArkTooltip.Trigger>
       <ArkTooltip.Positioner>
-        <ArkTooltip.Content className={style.content}>
+        <StyledContent>
           <ArkTooltip.Arrow>
             <ArkTooltip.ArrowTip />
           </ArkTooltip.Arrow>
           {content}
-        </ArkTooltip.Content>
+        </StyledContent>
       </ArkTooltip.Positioner>
     </ArkTooltip.Root>
   );

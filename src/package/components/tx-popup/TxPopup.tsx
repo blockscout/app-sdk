@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
+import styled from "styled-components";
 import Spinner from "../spinner/Spinner";
 import TxInterpretation from "../tx-interpretation/TxInterpretation";
 import { getTxSummaryStub } from "package/lib/getTxSummaryStub";
@@ -10,7 +11,227 @@ import IconClose from "package/assets/icons/close.svg";
 import Link from "../link/Link";
 import Age from "../age/Age";
 import StatusIcon from "./StatusIcon";
-import styles from "./TxPopup.module.css";
+
+const Overlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+`;
+
+const Container = styled.div`
+  display: flex;
+  width: 728px;
+  max-width: 95vw;
+  padding: var(--Space-Sections-3, 24px);
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--Space-Sections-3, 24px);
+  border-radius: 12px;
+  background: var(--background-for-themes-white, #fff);
+  box-shadow:
+    0px 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0px 4px 6px -2px rgba(0, 0, 0, 0.05);
+  position: relative;
+
+  @media (max-width: 600px) {
+    width: 90vw;
+    max-width: 90vw;
+    min-width: 0;
+    padding: 12px;
+    align-items: center;
+    justify-content: center;
+  }
+`;
+
+const Header = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+`;
+
+const Title = styled.h2`
+  margin: 0;
+  font-size: 24px;
+  font-weight: 500;
+
+  @media (max-width: 600px) {
+    font-size: 18px;
+  }
+`;
+
+const CloseButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: rgba(51, 54, 52, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: color 0.2s;
+
+  &:hover {
+    color: #1a1a1a;
+  }
+`;
+
+const LoadingContainer = styled.div`
+  text-align: center;
+  padding: 32px;
+`;
+
+const Error = styled.div`
+  color: #bd4d45;
+  margin-bottom: 16px;
+`;
+
+const TransactionsList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+`;
+
+const TransactionItem = styled.div`
+  display: flex;
+  background: #fff;
+  padding: 16px 0 8px 0;
+  justify-content: space-between;
+  align-items: center;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    padding: 12px 0 4px 0;
+  }
+`;
+
+const Divider = styled.hr`
+  height: 1px;
+  background: #ececec;
+  width: 100%;
+  margin: 0;
+  border: none;
+  display: none;
+
+  @media (max-width: 600px) {
+    display: block;
+  }
+`;
+
+const TransactionRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  @media (max-width: 600px) {
+    align-items: flex-start;
+    gap: 10px;
+  }
+`;
+
+const StatusIconWrapper = styled.div<{
+  status: "pending" | "success" | "error";
+}>`
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  flex-shrink: 0;
+  background: ${({ status }) =>
+    status === "pending"
+      ? "rgba(51, 54, 52, 0.05)"
+      : status === "success"
+        ? "#ebfbf1"
+        : "#fee2e2"};
+  color: ${({ status }) =>
+    status === "pending"
+      ? "rgba(59, 66, 126, 0.6)"
+      : status === "success"
+        ? "#329d6b"
+        : "#bd4d45"};
+
+  @media (max-width: 600px) {
+    width: 22px;
+    height: 22px;
+    margin-top: 2px;
+  }
+`;
+
+const TransactionContent = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+`;
+
+const TransactionHash = styled.div`
+  font-size: 16px;
+
+  @media (max-width: 600px) {
+    font-size: 14px;
+  }
+`;
+
+const TransactionMeta = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-left: 44px;
+
+  @media (max-width: 600px) {
+    gap: 8px;
+    margin-left: 32px;
+    margin-top: 4px;
+    justify-content: space-between;
+  }
+`;
+
+const Timestamp = styled.div`
+  font-size: 13px;
+  color: #a0a3ad;
+  font-weight: 400;
+`;
+
+const ExplorerLink = styled(Link)`
+  color: #596699;
+  text-decoration: none;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+
+  @media (max-width: 600px) {
+    font-size: 14px;
+  }
+`;
+
+const ExplorerLogo = styled.img`
+  margin-right: 4px;
+`;
+
+const ViewAllLink = styled.div`
+  width: 100%;
+  margin-top: 8px;
+  font-size: 14px;
+`;
 
 interface TxPopupProps {
   chainId: string;
@@ -63,7 +284,10 @@ export function useTxPopup() {
           : `${data.explorerUrl}${API_CONFIG.EXPLORER_API.ENDPOINTS.ALL_TRANSACTIONS()}`;
         console.log("txUrl", txUrl);
         const txResp = await fetch(txUrl);
-        if (!txResp.ok) throw new Error("Failed to fetch transactions");
+        if (!txResp.ok) {
+          setError("Failed to fetch transactions");
+          return;
+        }
         const txData = await txResp.json();
         const items: Transaction[] = txData.items?.slice(0, 5) || [];
         // 3. For each transaction, fetch summary/interpretation
@@ -94,11 +318,8 @@ export function useTxPopup() {
         if (abort) return;
         setTxs(txsWithSummaries);
       } catch (e: unknown) {
-        if (e instanceof Error) {
-          setError(e.message);
-        } else {
-          setError("Unknown error");
-        }
+        const error = e as { message?: string };
+        setError(error.message || "Unknown error occurred");
       } finally {
         setLoading(false);
       }
@@ -111,48 +332,42 @@ export function useTxPopup() {
 
   const Popup =
     isOpen && params ? (
-      <div className={styles.overlay}>
-        <div className={styles.container}>
-          <div className={styles.header}>
-            <h2 className={styles.title}>
+      <Overlay>
+        <Container>
+          <Header>
+            <Title>
               Recent transaction{" "}
               {params.address
                 ? `for ${params.address.slice(0, 4)}...${params.address.slice(-4)}`
                 : ""}
-            </h2>
-            <button
-              className={styles.closeButton}
-              onClick={closeModal}
-              aria-label="Close"
-            >
+            </Title>
+            <CloseButton onClick={closeModal} aria-label="Close">
               {/* @ts-expect-error SVG component props not properly typed */}
               <IconClose width={24} height={24} />
-            </button>
-          </div>
+            </CloseButton>
+          </Header>
           {loading && (
-            <div className={styles.loadingContainer}>
+            <LoadingContainer>
               <Spinner size={48} />
-            </div>
+            </LoadingContainer>
           )}
-          {error && <div className={styles.error}>{error}</div>}
+          {error && <Error>{error}</Error>}
           {!loading && !error && txs.length === 0 && (
             <div>No transactions found.</div>
           )}
-          <div className={styles.transactionsList}>
+          <TransactionsList>
             {txs.map(({ tx, summary, status }, idx) => (
               <>
-                <div key={tx.hash} className={styles.transactionItem}>
-                  <div className={styles.transactionRow}>
-                    <div
-                      className={`${styles.statusIcon} ${styles[`statusIcon${status.charAt(0).toUpperCase() + status.slice(1)}`]}`}
-                    >
+                <TransactionItem key={tx.hash}>
+                  <TransactionRow>
+                    <StatusIconWrapper status={status}>
                       <StatusIcon
                         status={status}
                         tx={tx}
                         searchAddress={params.address}
                       />
-                    </div>
-                    <div className={styles.transactionContent}>
+                    </StatusIconWrapper>
+                    <TransactionContent>
                       {summary ? (
                         <TxInterpretation
                           summary={summary}
@@ -173,51 +388,49 @@ export function useTxPopup() {
                           explorerUrl={chainData?.explorerUrl || ""}
                         />
                       ) : (
-                        <div className={styles.transactionHash}>
+                        <TransactionHash>
                           Transaction {tx.hash.slice(0, 12)}...
                           {tx.hash.slice(-4)}
-                        </div>
+                        </TransactionHash>
                       )}
-                    </div>
-                  </div>
-                  <div className={styles.transactionMeta}>
+                    </TransactionContent>
+                  </TransactionRow>
+                  <TransactionMeta>
                     {tx.timestamp && (
-                      <div className={styles.timestamp}>
+                      <Timestamp>
                         <Age timestamp={tx.timestamp} />
-                      </div>
+                      </Timestamp>
                     )}
-                    <Link
+                    <ExplorerLink
                       href={
                         chainData?.explorerUrl +
                         APP_CONFIG.URLS.TRANSACTION(tx.hash)
                       }
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={styles.explorerLink}
                       title="View on explorer"
                     >
-                      <img
+                      <ExplorerLogo
                         src={chainData?.explorerLogo}
                         alt="Explorer"
                         width={20}
                         height={20}
-                        className={styles.explorerLogo}
                       />{" "}
                       ↗
-                    </Link>
-                  </div>
-                </div>
-                {idx < txs.length - 1 && <hr className={styles.divider} />}
+                    </ExplorerLink>
+                  </TransactionMeta>
+                </TransactionItem>
+                {idx < txs.length - 1 && <Divider />}
               </>
             ))}
-          </div>
-          <div className={styles.viewAllLink}>
+          </TransactionsList>
+          <ViewAllLink>
             <Link href={APP_CONFIG.URLS.ALL_TRANSACTIONS()}>
               View all transactions in the block explorer
             </Link>
-          </div>
-        </div>
-      </div>
+          </ViewAllLink>
+        </Container>
+      </Overlay>
     ) : null;
 
   return { openModal, Popup };

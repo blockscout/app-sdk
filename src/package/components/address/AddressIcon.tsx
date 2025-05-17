@@ -1,5 +1,11 @@
+import styled from "styled-components";
 import GradientAvatar from "gradient-avatar";
-import style from "./AddressIcon.module.css";
+
+const IconContainer = styled.div`
+  width: 20px;
+  height: 20px;
+  display: flex;
+`;
 
 interface Props {
   hash: string;
@@ -7,9 +13,7 @@ interface Props {
 
 const AddressIcon = ({ hash }: Props) => {
   const svg = GradientAvatar(hash, 20, "circle");
-  return (
-    <div className={style.root} dangerouslySetInnerHTML={{ __html: svg }} />
-  );
+  return <IconContainer dangerouslySetInnerHTML={{ __html: svg }} />;
 };
 
 export default AddressIcon;

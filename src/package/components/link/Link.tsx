@@ -1,22 +1,35 @@
 import React from "react";
-import style from "./Link.module.css";
-import classNames from "classnames";
+import styled from "styled-components";
 
 interface Props extends React.ComponentProps<"a"> {
   className?: string;
 }
 
+const StyledLink = styled.a`
+  display: flex;
+  align-items: center;
+  color: #596699;
+  cursor: pointer;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+    .icon {
+      color: #596699;
+    }
+  }
+`;
+
 const Link = (props: Props) => {
   const { children, className, ...rest } = props;
   return (
-    <a
-      className={classNames(style.root, className)}
+    <StyledLink
+      className={className}
       target="_blank"
       rel="noopener noreferrer"
       {...rest}
     >
       {children}
-    </a>
+    </StyledLink>
   );
 };
 

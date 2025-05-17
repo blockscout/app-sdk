@@ -1,7 +1,11 @@
-import style from "./Age.module.css";
+import styled from "styled-components";
 import dayjs from "package/lib/dayjs";
 import Tooltip from "package/components/tooltip/Tooltip";
 import useTimeAgoIncrement from "./useTimeAgoIncrement";
+
+const StyledSpan = styled.span`
+  color: rgba(52, 63, 57, 0.36);
+`;
 
 interface Props {
   timestamp: string;
@@ -12,7 +16,7 @@ const Age = ({ timestamp }: Props) => {
   const age = useTimeAgoIncrement(timestamp);
   return (
     <Tooltip content={date.format("llll")}>
-      <span className={style.root}>{age}</span>
+      <StyledSpan>{age}</StyledSpan>
     </Tooltip>
   );
 };

@@ -1,7 +1,26 @@
+import styled from "styled-components";
 import { APP_CONFIG } from "package/config";
 import Age from "../age/Age";
 import Link from "../link/Link";
-import style from "./TxToastFooter.module.css";
+
+const Root = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  margin-top: 12px;
+`;
+
+const Timestamp = styled.span`
+  color: #b0b7c3;
+  font-size: 13px;
+`;
+
+const ExplorerLogo = styled.img`
+  width: 20px;
+  height: 20px;
+  margin-right: 4px;
+`;
 
 interface Props {
   timestamp: string | null;
@@ -17,23 +36,19 @@ const TxToastFooter = ({
   cleanExplorerUrl,
 }: Props) => {
   return (
-    <div className={style.root}>
+    <Root>
       <Link href={`${cleanExplorerUrl}${APP_CONFIG.URLS.TRANSACTION(hash)}`}>
         {explorerLogo && (
-          <img
-            src={explorerLogo}
-            alt="Explorer logo"
-            style={{ width: "20px", height: "20px", marginRight: "4px" }}
-          />
+          <ExplorerLogo src={explorerLogo} alt="Explorer logo" />
         )}
         View on block explorer
       </Link>
       {timestamp && (
-        <span className={style.timestamp}>
+        <Timestamp>
           <Age timestamp={timestamp} />
-        </span>
+        </Timestamp>
       )}
-    </div>
+    </Root>
   );
 };
 

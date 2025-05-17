@@ -1,9 +1,28 @@
 import React, { useCallback, useState } from "react";
 import { createPortal } from "react-dom";
-import "./Toast.module.css";
-import styles from "./Toast.module.css";
+import styled from "styled-components";
 import Toast from "./Toast";
 import { ToastContext, ToastOptions } from "./ToastContext";
+
+const ToastPortal = styled.div`
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9999;
+`;
+
+const ToastContainer = styled.div`
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  pointer-events: auto;
+`;
 
 export type ToastInstance = {
   id: string;
@@ -43,8 +62,8 @@ export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
     <ToastContext.Provider value={{ open, close, update }}>
       {children}
       {createPortal(
-        <div className={styles.toastPortal}>
-          <div className={styles.toastContainer}>
+        <ToastPortal>
+          <ToastContainer>
             {toasts.map((t) => (
               <Toast
                 key={t.id}
@@ -56,8 +75,8 @@ export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
                 onCloseCallback={t.options.onClose}
               />
             ))}
-          </div>
-        </div>,
+          </ToastContainer>
+        </ToastPortal>,
         document.body,
       )}
     </ToastContext.Provider>

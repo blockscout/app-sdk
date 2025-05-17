@@ -1,9 +1,17 @@
-import styles from "./Address.module.css";
+import styled from "styled-components";
 import Link from "../link/Link";
 import { truncateAddress } from "package/lib/truncation";
 import AddressIcon from "./AddressIcon";
 import Tooltip from "../tooltip/Tooltip";
 import { APP_CONFIG } from "package/config";
+
+const AddressLink = styled(Link)`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 600;
+`;
+
 interface Props {
   hash: string;
   explorerUrl: string;
@@ -11,15 +19,12 @@ interface Props {
 
 const Address = ({ hash, explorerUrl }: Props) => {
   return (
-    <Link
-      href={`${explorerUrl}${APP_CONFIG.URLS.ADDRESS(hash)}`}
-      className={styles.root}
-    >
+    <AddressLink href={`${explorerUrl}${APP_CONFIG.URLS.ADDRESS(hash)}`}>
       <AddressIcon hash={hash} />
       <Tooltip content={hash}>
         <span>{truncateAddress(hash)}</span>
       </Tooltip>
-    </Link>
+    </AddressLink>
   );
 };
 

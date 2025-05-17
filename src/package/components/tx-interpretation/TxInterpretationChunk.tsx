@@ -1,12 +1,30 @@
+import styled from "styled-components";
 import { AddressParam } from "package/api/types/address";
 import { NonStringTxInterpretationVariable } from "./types";
 import Address from "../address/Address";
-import style from "./TxInterpretationChunk.module.css";
 import Token from "../token/Token";
 import BigNumber from "bignumber.js";
 import dayjs from "dayjs";
 import Badge from "../badge/Badge";
 import Link from "../link/Link";
+
+const EntityContainer = styled.span`
+  display: inline-block;
+  vertical-align: top;
+  &:not(:last-child) {
+    margin-right: 4px;
+  }
+`;
+
+const BoldEntityContainer = styled(EntityContainer)`
+  font-weight: 600;
+`;
+
+const DappIcon = styled.img`
+  width: 20px;
+  height: 20px;
+`;
+
 interface Props {
   variable: NonStringTxInterpretationVariable;
   addressDataMap?: Record<string, AddressParam>;
@@ -26,33 +44,29 @@ const TxInterpretationChunk = ({
   switch (type) {
     case "address": {
       return (
-        <span className={style.entityContainer}>
+        <EntityContainer>
           <Address
             hash={(addressDataMap?.[value.hash] || value).hash}
             explorerUrl={explorerUrl}
             // FIXME: add support of address names and alt hashes
             // address={addressDataMap?.[value.hash] || value}
           />
-        </span>
+        </EntityContainer>
       );
     }
     case "token":
       return (
-        <span className={style.entityContainer}>
+        <EntityContainer>
           <Token
             hash={value.address_hash}
             symbol={value.symbol || ""}
             icon={value.icon_url}
             explorerUrl={explorerUrl}
           />
-        </span>
+        </EntityContainer>
       );
     case "domain": {
-      return (
-        <span className={style.entityContainer} style={{ fontWeight: 600 }}>
-          {value + " "}
-        </span>
-      );
+      return <BoldEntityContainer>{value + " "}</BoldEntityContainer>;
     }
     case "currency": {
       let numberString = "";
@@ -65,17 +79,13 @@ const TxInterpretationChunk = ({
       } else {
         numberString = BigNumber(value).dividedBy(1000000).toFormat(2) + "M";
       }
-      return (
-        <span className={style.entityContainer} style={{ fontWeight: 600 }}>
-          {numberString}
-        </span>
-      );
+      return <BoldEntityContainer>{numberString}</BoldEntityContainer>;
     }
     case "timestamp": {
       return (
-        <span className={style.entityContainer} style={{ fontWeight: 600 }}>
+        <BoldEntityContainer>
           {dayjs(Number(value) * 1000).format("MMM DD YYYY")}
-        </span>
+        </BoldEntityContainer>
       );
     }
     case "external_link": {
@@ -108,16 +118,10 @@ const TxInterpretationChunk = ({
       })();
 
       return (
-        <span className={style.entityContainer}>
-          {icon && (
-            <img
-              style={{ width: "20px", height: "20px" }}
-              src={icon}
-              alt="Dapp icon"
-            />
-          )}
+        <EntityContainer>
+          {icon && <DappIcon src={icon} alt="Dapp icon" />}
           {name}
-        </span>
+        </EntityContainer>
       );
     }
     default:
