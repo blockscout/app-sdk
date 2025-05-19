@@ -283,21 +283,26 @@ export function TxPopup({ chainId, address, onClose }: TxPopupProps) {
           items.map(async (tx) => {
             let summary = null;
             let status: "pending" | "success" | "error" = "success";
-            try {
-              const summaryResp = await fetch(
-                `${data.explorerUrl}${API_CONFIG.EXPLORER_API.ENDPOINTS.TRANSACTION_SUMMARY(tx.hash)}`,
-              );
-              if (summaryResp.ok) {
-                const summaryData = await summaryResp.json();
-                summary = summaryData?.data?.summaries?.[0];
+
+            // Only fetch summary for successful transactions
+            if (tx.status === "ok") {
+              try {
+                const summaryResp = await fetch(
+                  `${data.explorerUrl}${API_CONFIG.EXPLORER_API.ENDPOINTS.TRANSACTION_SUMMARY(tx.hash)}`,
+                );
+                if (summaryResp.ok) {
+                  const summaryData = await summaryResp.json();
+                  summary = summaryData?.data?.summaries?.[0];
+                }
+                if (!summary && tx.method) {
+                  summary = getTxSummaryStub(tx.from, tx.method, tx.to);
+                }
+              } catch {
+                if (tx.method)
+                  summary = getTxSummaryStub(tx.from, tx.method, tx.to);
               }
-              if (!summary && tx.method) {
-                summary = getTxSummaryStub(tx.from, tx.method, tx.to);
-              }
-            } catch {
-              if (tx.method)
-                summary = getTxSummaryStub(tx.from, tx.method, tx.to);
             }
+
             if (tx.status === null) status = "pending";
             else if (tx.status === "error") status = "error";
             return { tx, summary, status };
