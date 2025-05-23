@@ -155,8 +155,8 @@ const TransactionRow = styled.div`
 const StatusIconWrapper = styled.div<{
   status: "pending" | "success" | "error";
 }>`
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -260,6 +260,14 @@ export function TxPopup({ chainId, address, onClose }: TxPopupProps) {
   const [error, setError] = useState<string | null>(null);
   const [txs, setTxs] = useState<TxWithSummary[]>([]);
   const [chainData, setChainData] = useState<ChainData | null>(null);
+
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth <= 600);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   const handleOverlayClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
@@ -395,11 +403,7 @@ export function TxPopup({ chainId, address, onClose }: TxPopupProps) {
                 >
                   <TransactionRow>
                     <StatusIconWrapper status={status}>
-                      <StatusIcon
-                        status={status}
-                        tx={tx}
-                        searchAddress={address}
-                      />
+                      <StatusIcon status={status} size={isMobile ? 16 : 20} />
                     </StatusIconWrapper>
                     <TransactionContent>
                       {summary ? (
