@@ -142,11 +142,11 @@ function YourComponent() {
 - Mobile-responsive design
 - Loading states and error handling
 
-## Chain IDs
+## Chain Compatibility
 
-The SDK only supports chains that have a Blockscout explorer deployment. You can check the complete list of supported chains at [chains.blockscout.com](https://chains.blockscout.com/).
+The SDK is compatible with any blockchain that has a Blockscout explorer instance with API v2 support. These chains are listed in the [Chainscout](https://chains.blockscout.com/). To verify if your target chain is supported, visit our [compatibility checker](https://sdk-compatibility.blockscout.com/).
 
-Here are some common chain IDs:
+Here are some common supported chain IDs:
 
 - `1`: Ethereum Mainnet
 - `137`: Polygon Mainnet

@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import Link from "../link/Link";
 import { truncateAddress } from "package/lib/truncation";
-import AddressIcon from "./AddressIcon";
 import Tooltip from "../tooltip/Tooltip";
 import { APP_CONFIG } from "package/config";
 
@@ -20,7 +19,6 @@ interface Props {
 const Address = ({ hash, explorerUrl }: Props) => {
   return (
     <AddressLink href={`${explorerUrl}${APP_CONFIG.URLS.ADDRESS(hash)}`}>
-      <AddressIcon hash={hash} />
       <Tooltip content={hash}>
         <span>{truncateAddress(hash)}</span>
       </Tooltip>

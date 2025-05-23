@@ -42,12 +42,13 @@ const ToastWrapper = styled.div<{ show: boolean }>`
     sans-serif;
 
   @media (max-width: 600px) {
-    width: calc(100vw - 24px);
+    width: calc(100vw - 16px);
     max-width: calc(100vw - 16px);
+    box-sizing: border-box;
     min-width: 0;
     padding: 12px 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    margin-left: 4px;
+    margin: 0 8px;
   }
 `;
 

@@ -94,6 +94,14 @@ export function useNotification() {
         );
 
         if (!txResponse.ok) {
+          if (txResponse.status === 404) {
+            update(toastId, {
+              title: "Looking for the transaction",
+              status: "pending",
+              content: "Waiting for transaction to be indexed",
+            });
+            return;
+          }
           update(toastId, {
             title: "Transaction is failed",
             status: "error",
@@ -121,7 +129,6 @@ export function useNotification() {
           let summary;
           if (summaryResponse.ok) {
             const summaryData = await summaryResponse.json();
-            console.log("summaryData", summaryData);
             summary = summaryData?.data?.summaries?.[0];
           } else if (txData.method) {
             summary = getTxSummaryStub(txData.from, txData.method, txData.to);

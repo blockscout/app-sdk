@@ -9,8 +9,10 @@ import Badge from "../badge/Badge";
 import Link from "../link/Link";
 
 const EntityContainer = styled.span`
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   vertical-align: top;
+  gap: 4px;
   &:not(:last-child) {
     margin-right: 4px;
   }

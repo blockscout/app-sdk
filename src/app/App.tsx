@@ -13,7 +13,7 @@ const TX_HASHES = {
   ethereum: [
     "0x5e9beca18c46289e92c7ce6c930a1496c5ed24994cfdd00acb61880ebcf3b593",
     "0x6e9beca18c46289e92c7ce6c930a1496c5ed24994cfdd00acb61880ebcf3b594",
-    "0x7e9beca18c46289e92c7ce6c930a1496c5ed24994cfdd00acb61880ebcf3b595",
+    "0x8b8e4e74d63d309498595d012abcc4feef399bff8443cfb64c4cb2b0559ca421",
   ],
   polygon: [
     "0x7e9beca18c46289e92c7ce6c930a1496c5ed24994cfdd00acb61880ebcf3b593",

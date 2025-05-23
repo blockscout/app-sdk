@@ -8,9 +8,11 @@ import { Transaction } from "package/api/types/tx";
 import { TxInterpretationSummary } from "package/api/types/tx-interpretation";
 import { ChainData, fetchChainData } from "package/lib/getChainData";
 import IconClose from "package/assets/icons/close.svg";
+import IconExternalLink from "package/assets/icons/link_external.svg";
 import Link from "../link/Link";
 import Age from "../age/Age";
 import StatusIcon from "./StatusIcon";
+import Tooltip from "../tooltip/Tooltip";
 
 const Overlay = styled.div`
   position: fixed;
@@ -105,6 +107,7 @@ const Error = styled.div`
 const TransactionsList = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 0;
   width: 100%;
 `;
@@ -115,8 +118,11 @@ const TransactionItem = styled.div`
   padding: 16px 0 8px 0;
   justify-content: space-between;
   line-height: 22px;
+  width: 100%;
+  cursor: pointer;
 
   @media (max-width: 600px) {
+    align-items: flex-start;
     flex-direction: column;
     padding: 12px 0 4px 0;
   }
@@ -223,7 +229,12 @@ const ExplorerLink = styled(Link)`
 `;
 
 const ExplorerLogo = styled.img`
-  margin-right: 4px;
+  margin-right: 10px;
+`;
+
+const ExplorerContent = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const ViewAllLink = styled.div`
@@ -249,6 +260,16 @@ export function TxPopup({ chainId, address, onClose }: TxPopupProps) {
   const [error, setError] = useState<string | null>(null);
   const [txs, setTxs] = useState<TxWithSummary[]>([]);
   const [chainData, setChainData] = useState<ChainData | null>(null);
+
+  const handleOverlayClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
+  const handleExplorerLinkClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+  };
 
   useEffect(() => {
     let abort = false;
@@ -327,7 +348,7 @@ export function TxPopup({ chainId, address, onClose }: TxPopupProps) {
   }, [chainId, address]);
 
   return (
-    <Overlay>
+    <Overlay onClick={handleOverlayClick}>
       <Container>
         <Header>
           <Title>
@@ -351,7 +372,27 @@ export function TxPopup({ chainId, address, onClose }: TxPopupProps) {
           <TransactionsList>
             {txs.map(({ tx, summary, status }, idx) => (
               <React.Fragment key={tx.hash}>
-                <TransactionItem>
+                <TransactionItem
+                  onClick={(e) => {
+                    // Don't open transaction if clicking on a link or any element with an href
+                    const target = e.target as HTMLElement;
+                    console.log("target", target);
+                    if (
+                      target instanceof HTMLAnchorElement ||
+                      target.closest("a") ||
+                      target.closest('[role="link"]') ||
+                      target.closest("[onClick]")
+                    ) {
+                      return;
+                    }
+                    window.open(
+                      chainData?.explorerUrl +
+                        APP_CONFIG.URLS.TRANSACTION(tx.hash),
+                      "_blank",
+                      "noopener,noreferrer",
+                    );
+                  }}
+                >
                   <TransactionRow>
                     <StatusIconWrapper status={status}>
                       <StatusIcon
@@ -401,15 +442,20 @@ export function TxPopup({ chainId, address, onClose }: TxPopupProps) {
                       }
                       target="_blank"
                       rel="noopener noreferrer"
-                      title="View on explorer"
+                      onClick={handleExplorerLinkClick}
                     >
-                      <ExplorerLogo
-                        src={chainData?.explorerLogo}
-                        alt="Explorer"
-                        width={20}
-                        height={20}
-                      />{" "}
-                      ↗
+                      <Tooltip content="View in block explorer">
+                        <ExplorerContent>
+                          <ExplorerLogo
+                            src={chainData?.explorerLogo}
+                            alt="Explorer"
+                            width={20}
+                            height={20}
+                          />
+                          {/* @ts-expect-error SVG component from vite-plugin-svgr needs width/height props */}
+                          <IconExternalLink width={20} height={20} />
+                        </ExplorerContent>
+                      </Tooltip>
                     </ExplorerLink>
                   </TransactionMeta>
                 </TransactionItem>
@@ -419,7 +465,14 @@ export function TxPopup({ chainId, address, onClose }: TxPopupProps) {
           </TransactionsList>
         )}
         <ViewAllLink>
-          <Link href={APP_CONFIG.URLS.ALL_TRANSACTIONS()}>
+          <Link
+            href={
+              chainData?.explorerUrl +
+              (address
+                ? APP_CONFIG.URLS.ADDRESS_TRANSACTIONS(address)
+                : APP_CONFIG.URLS.ALL_TRANSACTIONS())
+            }
+          >
             View all transactions in the block explorer
           </Link>
         </ViewAllLink>

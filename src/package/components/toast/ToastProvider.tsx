@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import styled from "styled-components";
 import Toast from "./Toast";
@@ -41,8 +41,12 @@ export const NotificationProvider = ({
   children: React.ReactNode;
 }) => {
   const [toasts, setToasts] = useState<ToastInstance[]>([]);
+  const [isMounted, setIsMounted] = useState(false);
 
-  console.log("toasts", toasts);
+  useEffect(() => {
+    setIsMounted(true);
+    return () => setIsMounted(false);
+  }, []);
 
   const open = useCallback((options: ToastOptions) => {
     const id = Math.random().toString(36).substring(2, 9);
@@ -71,24 +75,26 @@ export const NotificationProvider = ({
   return (
     <ToastContext.Provider value={{ open, close, update }}>
       {children}
-      {createPortal(
-        <ToastPortal>
-          <ToastContainer>
-            {toasts.map((t) => (
-              <Toast
-                key={t.id}
-                id={t.id}
-                title={t.options.title}
-                content={t.options.content}
-                status={t.options.status}
-                onClose={close}
-                onCloseCallback={t.options.onClose}
-              />
-            ))}
-          </ToastContainer>
-        </ToastPortal>,
-        document.body,
-      )}
+      {isMounted &&
+        typeof window !== "undefined" &&
+        createPortal(
+          <ToastPortal>
+            <ToastContainer>
+              {toasts.map((t) => (
+                <Toast
+                  key={t.id}
+                  id={t.id}
+                  title={t.options.title}
+                  content={t.options.content}
+                  status={t.options.status}
+                  onClose={close}
+                  onCloseCallback={t.options.onClose}
+                />
+              ))}
+            </ToastContainer>
+          </ToastPortal>,
+          document.body,
+        )}
     </ToastContext.Provider>
   );
 };
