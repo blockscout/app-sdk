@@ -1,6 +1,9 @@
 // we use that regex as a separator when splitting template and dont want to capture variables
 
-import type { TxInterpretationVariable } from "package/api/types/tx-interpretation";
+import type {
+  TxInterpretationSummary,
+  TxInterpretationVariable,
+} from "package/api/types/tx-interpretation";
 
 export const VAR_REGEXP = /\{(?:[^}]+)\}/g;
 
@@ -21,10 +24,10 @@ export function getStringChunks(template: string) {
   return template.split(VAR_REGEXP);
 }
 
-export function checkSummary(
-  template: string,
-  variables: Record<string, TxInterpretationVariable>,
-) {
+export function checkSummary(summary: TxInterpretationSummary) {
+  const template = summary.summary_template;
+  const variables = summary.summary_template_variables;
+
   const variablesNames = extractVariables(template);
   let result = true;
   for (const name of variablesNames) {

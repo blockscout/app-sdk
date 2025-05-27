@@ -13,6 +13,7 @@ import Link from "../link/Link";
 import Age from "../age/Age";
 import StatusIcon from "./StatusIcon";
 import Tooltip from "../tooltip/Tooltip";
+import { checkSummary } from "../tx-interpretation/utils";
 
 const Overlay = styled.div`
   position: fixed;
@@ -406,7 +407,7 @@ export function TxPopup({ chainId, address, onClose }: TxPopupProps) {
                       <StatusIcon status={status} size={isMobile ? 16 : 20} />
                     </StatusIconWrapper>
                     <TransactionContent>
-                      {summary ? (
+                      {summary && checkSummary(summary) ? (
                         <TxInterpretation
                           summary={summary}
                           addressDataMap={{

@@ -7,7 +7,7 @@ import { Transaction } from "package/api/types/tx";
 import TxInterpretation from "../tx-interpretation/TxInterpretation";
 import TxToastFooter from "./TxToastFooter";
 import { ChainData, fetchChainData } from "package/lib/getChainData";
-
+import { checkSummary } from "../tx-interpretation/utils";
 const HEX_REGEXP = /^(?:0x)?[\da-fA-F]+$/;
 
 const getTxSummaryStub = (
@@ -136,7 +136,7 @@ export function useNotification() {
 
           let content: React.ReactNode = "Transaction confirmed";
 
-          if (summary) {
+          if (summary && checkSummary(summary)) {
             const chainData = chainDataRef.current.get(chainId);
             const currencyData = chainData
               ? {

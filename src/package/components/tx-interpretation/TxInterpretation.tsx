@@ -48,16 +48,12 @@ const TxInterpretation = ({
   currencyData,
   explorerUrl,
 }: Props) => {
-  if (!summary) {
+  if (!summary || !checkSummary(summary)) {
     return null;
   }
 
   const template = summary.summary_template;
   const variables = summary.summary_template_variables;
-
-  if (!checkSummary(template, variables)) {
-    return null;
-  }
 
   const intermediateResult = fillStringVariables(template, variables);
   const variablesNames = extractVariables(intermediateResult);

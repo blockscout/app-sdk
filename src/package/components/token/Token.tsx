@@ -16,7 +16,7 @@ const Symbol = styled.span`
 
 interface Props {
   hash: string;
-  symbol: string;
+  symbol?: string;
   icon?: string | null;
   explorerUrl: string;
 }
@@ -25,7 +25,7 @@ const Token = ({ hash, symbol, icon, explorerUrl }: Props) => {
   return (
     <TokenLink href={`${explorerUrl}${APP_CONFIG.URLS.TOKEN(hash)}`}>
       <TokenIcon src={icon || undefined} />
-      <Symbol>{symbol}</Symbol>
+      <Symbol>{symbol || "Unnamed token"}</Symbol>
     </TokenLink>
   );
 };
