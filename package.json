@@ -1,7 +1,6 @@
 {
   "name": "@blockscout/app-sdk",
   "private": false,
-  "version": "0.0.1-alpha.6",
   "type": "module",
   "description": "A React SDK for Blockscout integration",
   "main": "./dist/index.js",
