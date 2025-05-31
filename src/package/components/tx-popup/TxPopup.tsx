@@ -46,6 +46,7 @@ const Container = styled.div`
   align-items: flex-start;
   gap: var(--Space-Sections-3, 24px);
   border-radius: 12px;
+  color: rgba(16, 17, 18, 0.8);
   background: var(--background-for-themes-white, #fff);
   box-shadow:
     0px 10px 15px -3px rgba(0, 0, 0, 0.1),

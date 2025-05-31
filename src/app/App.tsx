@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { NotificationProvider } from "package/components/toast/ToastProvider";
 import { useTransactionPopup } from "package/components/tx-popup/useTxPopup";
 import { TransactionPopupProvider } from "package/components/tx-popup/TxPopupProvider";
+import "../index.css";
 
 // Example transaction hashes
 const TX_HASHES = {
