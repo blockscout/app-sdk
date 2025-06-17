@@ -1,4 +1,4 @@
-# Blockscout App SDK
+# Blockscout UI SDK
 
 A React SDK for integrating Blockscout transaction notifications and transaction history into your dApp.
 
