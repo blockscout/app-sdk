@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: LicenseRef-Blockscout
+
 export interface Explorer {
   url: string;
   hostedBy: string;

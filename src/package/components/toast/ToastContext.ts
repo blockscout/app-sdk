@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: LicenseRef-Blockscout
+
 import { createContext } from "react";
 
 type ToastStatus = "success" | "error" | "pending";

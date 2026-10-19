@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: LicenseRef-Blockscout
+
 import styled from "styled-components";
 import Link from "../link/Link";
 import { truncateAddress } from "package/lib/truncation";

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: LicenseRef-Blockscout
+
 import { API_CONFIG } from "../config";
 import { defaultCurrencyUnits } from "./chain";
 

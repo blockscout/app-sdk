@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: LicenseRef-Blockscout
+
 import { createContext } from "react";
 
 export interface TxPopupOptions {

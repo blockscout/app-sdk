@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: LicenseRef-Blockscout
+
 import hexToBytes from "./hexToBytes";
 
 export default function hexToUtf8(hex: string) {

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: LicenseRef-Blockscout
+
 import styled from "styled-components";
 import { AddressParam } from "package/api/types/address";
 import { TxInterpretationSummary } from "package/api/types/tx-interpretation";

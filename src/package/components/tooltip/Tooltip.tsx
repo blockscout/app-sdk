@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: LicenseRef-Blockscout
+
 import styled from "styled-components";
 import { Tooltip as ArkTooltip } from "@ark-ui/react/tooltip";
 

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: LicenseRef-Blockscout
+
 export type SmartContractProxyType =
   | "eip1167"
   | "eip1967"

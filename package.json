@@ -42,6 +42,7 @@
     "vite-tsconfig-paths": "5.1.4"
   },
   "lint-staged": {
+    "*.{js,ts,tsx}": "eslint --fix",
     "**/*": "prettier --write --ignore-unknown"
   },
   "keywords": [
@@ -52,7 +53,7 @@
     "ethereum"
   ],
   "author": "",
-  "license": "MIT",
+  "license": "SEE LICENSE IN ./LICENSE",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/blockscout/app-sdk.git"

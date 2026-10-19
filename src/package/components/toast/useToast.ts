@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: LicenseRef-Blockscout
+
 import { useContext } from "react";
 import { ToastContext } from "./ToastContext";
 
