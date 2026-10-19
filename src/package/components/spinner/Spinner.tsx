@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: LicenseRef-Blockscout
+
 import styled, { keyframes } from "styled-components";
 
 const spin = keyframes`

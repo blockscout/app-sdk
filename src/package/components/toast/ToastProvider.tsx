@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: LicenseRef-Blockscout
+
 import React, { useCallback, useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import styled from "styled-components";

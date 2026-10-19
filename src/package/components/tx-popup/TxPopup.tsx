@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: LicenseRef-Blockscout
+
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Spinner from "../spinner/Spinner";

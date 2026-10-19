@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: LicenseRef-Blockscout
+
 export type NFTTokenType = "ERC-721" | "ERC-1155" | "ERC-404";
 export type TokenType = "ERC-20" | NFTTokenType;
 

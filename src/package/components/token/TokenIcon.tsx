@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: LicenseRef-Blockscout
+
 import styled from "styled-components";
 import TokenIconPlaceholder from "package/assets/icons/token_icon_placeholder.svg";
 

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: LicenseRef-Blockscout
+
 import styled from "styled-components";
 import { APP_CONFIG } from "package/config";
 import Link from "../link/Link";

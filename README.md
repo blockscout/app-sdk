@@ -182,4 +182,8 @@ This project is currently closed for external contributions. We appreciate your 
 
 ## License
 
-MIT
+[![License: Blockscout Software Licence](https://img.shields.io/badge/License-Blockscout%20Software%20Licence-blue.svg)](LICENSE)
+
+This project is licensed under the Blockscout Software Licence. See the [LICENSE](LICENSE) file for full terms.
+
+Third-party components included in this repository remain subject to their own licenses. See dependency manifests and bundled third-party notices for component-level license terms.

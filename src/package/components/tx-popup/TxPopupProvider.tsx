@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: LicenseRef-Blockscout
+
 import React, { useCallback, useState } from "react";
 import { TxPopupContext, TxPopupOptions } from "./TxPopupContext";
 import { TxPopup } from "./TxPopup";

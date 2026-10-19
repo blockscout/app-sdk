@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: LicenseRef-Blockscout
+
 import styled from "styled-components";
 import dayjs from "package/lib/dayjs";
 import Tooltip from "package/components/tooltip/Tooltip";

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: LicenseRef-Blockscout
+
 import Link from "package/components/link/Link";
 import Age from "package/components/age/Age";
 import Address from "package/components/address/Address";

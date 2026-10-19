@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: LicenseRef-Blockscout
+
 import { AddressParam } from "../api/types/address";
 
 export const getTxSummaryStub = (

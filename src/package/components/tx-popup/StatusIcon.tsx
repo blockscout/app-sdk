@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: LicenseRef-Blockscout
+
 import IconSuccess from "package/assets/icons/success.svg";
 import IconError from "package/assets/icons/status_error.svg";
 import Spinner from "../spinner/Spinner";
