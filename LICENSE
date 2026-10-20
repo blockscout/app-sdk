@@ -48,11 +48,14 @@ incorporated under the laws of the Republic of Seychelles.
 the Software that was made available by or on behalf of the Licensor 
 before the Effective Date, and that is not distributed under this Licence.
 
-“Software” means the Blockscout blockchain explorer, a tool for 
-inspecting and analyzing blockchain networks, as made available by the 
+“Software” means the Blockscout App SDK (published as the 
+@blockscout/app-sdk package), a software development kit for integrating 
+Blockscout transaction notifications, transaction history, and related 
+functionality into third-party applications, as made available by the 
 Licensor under this Licence, including the source code, object code, 
-executable files, configuration and deployment materials, documentation, 
-APIs/SDKs (if any), and any part or portion thereof.
+compiled and bundled packages (including as distributed through the npm 
+registry or any other package registry), executable files, configuration 
+materials, documentation, APIs, and any part or portion thereof.
 
 “You” or “your” means the individual who accepts this Licence. Where you 
 act on behalf of an entity, “you” shall refer to both: (i) you as an 
