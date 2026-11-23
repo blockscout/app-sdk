@@ -16,6 +16,8 @@ A React SDK for integrating Blockscout transaction notifications and transaction
 npm install @blockscout/app-sdk
 # or
 yarn add @blockscout/app-sdk
+# or
+pnpm add @blockscout/app-sdk
 ```
 
 ## Usage
@@ -174,6 +176,18 @@ openPopup(options: {
   chainId: string;
   address?: string;
 }): void
+```
+
+## Development
+
+The repository uses [pnpm](https://pnpm.io) and the Node.js version in `.nvmrc`.
+
+```bash
+pnpm install    # install dependencies
+pnpm dev        # run the demo app
+pnpm lint       # run ESLint
+pnpm typecheck  # check types
+pnpm build      # build the package into dist/
 ```
 
 ## Contributing
