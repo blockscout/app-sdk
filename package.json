@@ -65,6 +65,7 @@
   "engines": {
     "node": ">=20.0.0"
   },
+  "packageManager": "pnpm@12.4.1",
   "dependencies": {
     "@ark-ui/react": "5.9.1",
     "@types/styled-components": "5.1.34",
