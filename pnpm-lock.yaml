@@ -260,8 +260,8 @@ importers:
         specifier: ^0.4.19
         version: 0.4.26(eslint@9.39.5(supports-color@8.1.1))
       frontend-home:
-        specifier: github:blockscout/frontend-home#ace19cd4e4511ec06b405925aeb60e030b3899d3
-        version: https://codeload.github.com/blockscout/frontend-home/tar.gz/ace19cd4e4511ec06b405925aeb60e030b3899d3
+        specifier: github:blockscout/frontend-home#70e6e8439d81624b009c60d0ed97489cec7f595f
+        version: https://codeload.github.com/blockscout/frontend-home/tar.gz/70e6e8439d81624b009c60d0ed97489cec7f595f(typescript@5.7.3)
       globals:
         specifier: ^16.0.0
         version: 16.5.0
@@ -3126,16 +3126,18 @@ packages:
         integrity: sha512-5+ybhBZANEJxaH3X5evAFatUxLfEHSr7n6kYJ+1Qd0mUqr4eu9gIf6GDbWHf8RJijHrjjO8G+la14SlL2SeS1Q==,
       }
 
-  frontend-home@https://codeload.github.com/blockscout/frontend-home/tar.gz/ace19cd4e4511ec06b405925aeb60e030b3899d3:
+  frontend-home@https://codeload.github.com/blockscout/frontend-home/tar.gz/70e6e8439d81624b009c60d0ed97489cec7f595f:
     resolution:
       {
         gitHosted: true,
-        integrity: sha512-iXUWKBC90RlkvrO1pFLfcgMtYuK5LeA0z4KlHYR3FZmwtS/Qxr6+wRVXVMF9ffMjkPD7Jr2P5WYAl7VYf2BQug==,
-        tarball: https://codeload.github.com/blockscout/frontend-home/tar.gz/ace19cd4e4511ec06b405925aeb60e030b3899d3,
+        integrity: sha512-MvJ/eoIfpFCRWVpi/GAnvL3I2HeibvChgpeE45+qGYSNhGcHpQa1t8vcYCHCI149H1iAZ6pjT9dAL+R19WzZUg==,
+        tarball: https://codeload.github.com/blockscout/frontend-home/tar.gz/70e6e8439d81624b009c60d0ed97489cec7f595f,
       }
     version: 0.0.0
     engines: { node: ">=24.21.0", pnpm: ">=9.0.0" }
     hasBin: true
+    peerDependencies:
+      typescript: ">=5.7"
 
   fs-extra@11.3.6:
     resolution:
@@ -6404,8 +6406,9 @@ snapshots:
 
   flatted@3.4.4: {}
 
-  frontend-home@https://codeload.github.com/blockscout/frontend-home/tar.gz/ace19cd4e4511ec06b405925aeb60e030b3899d3:
-    {}
+  frontend-home@https://codeload.github.com/blockscout/frontend-home/tar.gz/70e6e8439d81624b009c60d0ed97489cec7f595f(typescript@5.7.3):
+    dependencies:
+      typescript: 5.7.3
 
   fs-extra@11.3.6:
     dependencies:

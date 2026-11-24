@@ -1,0 +1,6 @@
+{
+  "roots": ["src/"],
+  "maxCognitiveJsx": 25,
+  "maxCognitiveBehavior": 20,
+  "coverage": false
+}

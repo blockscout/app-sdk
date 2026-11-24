@@ -188,10 +188,11 @@ pnpm dev          # run the demo app
 pnpm lint         # run ESLint
 pnpm lint:cspell  # check spelling
 pnpm typecheck    # check types
+pnpm test:code-complexity --changed  # score the functions changed against origin/main
 pnpm build        # build the package into dist/
 ```
 
-The spell check takes its settings and the shared words from [`blockscout/frontend-home`](https://github.com/blockscout/frontend-home), a development dependency pinned by commit. A word only this repository uses goes in `cspell.jsonc`. To move the pin, run `pnpm home:bump [<commit-or-ref>]` and commit the three files it changes. [How the pin works](https://github.com/blockscout/frontend-home/blob/main/tools/home-bump/CONTEXT.md).
+The spell check takes its settings and the shared words from [`blockscout/frontend-home`](https://github.com/blockscout/frontend-home), a development dependency pinned by commit. A word only this repository uses goes in `cspell.jsonc`. The cognitive complexity gate comes from the same dependency, with its caps in `code-complexity.config.json`. Everything taken from there is listed in [`.agents/AGENTS.md`](.agents/AGENTS.md). To move the pin, run `pnpm home:bump [<commit-or-ref>]` and commit the three files it changes. [How the pin works](https://github.com/blockscout/frontend-home/blob/main/tools/home-bump/CONTEXT.md).
 
 ## Contributing
 
