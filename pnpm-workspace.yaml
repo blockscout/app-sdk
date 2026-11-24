@@ -2,6 +2,6 @@ allowBuilds:
   esbuild: false
   # The home repo (blockscout/frontend-home), whose `prepare` builds the shared developer tools. pnpm wants
   # the exact commit here and in package.json; change both with `pnpm home:bump`, never by hand.
-  "frontend-home@https://codeload.github.com/blockscout/frontend-home/tar.gz/ace19cd4e4511ec06b405925aeb60e030b3899d3": true
+  "frontend-home@https://codeload.github.com/blockscout/frontend-home/tar.gz/70e6e8439d81624b009c60d0ed97489cec7f595f": true
 
 minimumReleaseAge: 10080 # 1 week
