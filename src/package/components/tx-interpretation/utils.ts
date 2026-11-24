@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: LicenseRef-Blockscout
 
-// we use that regex as a separator when splitting template and dont want to capture variables
+// we use that regex as a separator when splitting template and don't want to capture variables
 
 import type {
   TxInterpretationSummary,
