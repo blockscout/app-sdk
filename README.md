@@ -183,12 +183,15 @@ openPopup(options: {
 The repository uses [pnpm](https://pnpm.io) and the Node.js version in `.nvmrc`.
 
 ```bash
-pnpm install    # install dependencies
-pnpm dev        # run the demo app
-pnpm lint       # run ESLint
-pnpm typecheck  # check types
-pnpm build      # build the package into dist/
+pnpm install      # install dependencies
+pnpm dev          # run the demo app
+pnpm lint         # run ESLint
+pnpm lint:cspell  # check spelling
+pnpm typecheck    # check types
+pnpm build        # build the package into dist/
 ```
+
+The spell check takes its settings and the shared words from [`blockscout/frontend-home`](https://github.com/blockscout/frontend-home), a development dependency pinned by commit. A word only this repository uses goes in `cspell.jsonc`. To move the pin, run `pnpm home:bump [<commit-or-ref>]` and commit the three files it changes. [How the pin works](https://github.com/blockscout/frontend-home/blob/main/tools/home-bump/CONTEXT.md).
 
 ## Contributing
 

@@ -1,0 +1,10 @@
+{
+  // The settings and the words shared by the Blockscout frontend repositories
+  "import": ["frontend-home/configs/cspell/base.jsonc"],
+  // Stop at this repository's root: without it cspell also applies the .gitignore of a repository this
+  // one is nested in, and checks no files when that one ignores the path
+  "gitignoreRoot": ".",
+  "ignorePaths": ["**/*.svg", ".git", "pnpm-lock.yaml"],
+  // Words only this repository uses
+  "words": ["njsproj", "ntvs"],
+}

@@ -14,9 +14,11 @@
     "dev": "vite -c vite.config.app.ts",
     "build": "tsc -b && vite build -c vite.config.package.ts",
     "lint": "eslint .",
+    "lint:cspell": "cspell .",
     "format": "prettier --write .",
     "prepare": "husky",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "home:bump": "home-bump"
   },
   "peerDependencies": {
     "react": "^19.0.0",
@@ -27,9 +29,11 @@
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "@vitejs/plugin-react": "^4.3.4",
+    "cspell": "9.8.0",
     "eslint": "^9.22.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.19",
+    "frontend-home": "github:blockscout/frontend-home#ace19cd4e4511ec06b405925aeb60e030b3899d3",
     "globals": "^16.0.0",
     "husky": "9.1.7",
     "lint-staged": "15.5.1",
@@ -43,7 +47,10 @@
   },
   "lint-staged": {
     "*.{js,ts,tsx}": "eslint --fix",
-    "**/*": "prettier --write --ignore-unknown"
+    "**/*": [
+      "prettier --write --ignore-unknown",
+      "cspell --no-must-find-files --no-progress"
+    ]
   },
   "keywords": [
     "blockscout",

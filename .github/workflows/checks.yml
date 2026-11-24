@@ -33,6 +33,9 @@ jobs:
       - name: Run ESLint
         run: pnpm lint
 
+      - name: Check spelling
+        run: pnpm lint:cspell --no-progress
+
       - name: Compile TypeScript
         run: pnpm typecheck
 
